@@ -1,4 +1,15 @@
-# Salaried Monkeys for Bloons TD 6
+# Monkeys for Hire in Bloons TD 6
+
+## Introduction
+
+Usually in a tower defense game, you buy a tower and you upgrade a tower. You pay once, and you get to keep your prized posessions forever. However, in Bloons; most of the towers are monkeys; living, breathing creatures; so someone's gotta pay them in the monkey economy, right? 
+
+Introducing Monkeys for Hire, a mod that changes Bloons such that the monkeys are paid contractors as opposed to fixed cost towers.
+
+## Download
+
+You can find the download for the mod in the [Releases Section on GitHub](https://github.com/Sewer56/BloonsTD6.Mod.SalariedMonkeys/releases/latest).  
+Simply extract the DLL to your `Mods` directory.  
 
 ## Building
 
