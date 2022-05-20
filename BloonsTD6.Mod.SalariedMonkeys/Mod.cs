@@ -2,6 +2,7 @@
 using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Simulation.Objects;
 using Assets.Scripts.Simulation.Towers;
+using Assets.Scripts.Unity.UI_New.InGame;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
@@ -32,6 +33,7 @@ public class Mod : BloonsTD6Mod
     private static CashDisplay? _cashDisplay;
     private static ModSettings _modSettings = new ModSettings();
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
+    private static bool _isOnRoundEnd = false;
 
     public override void OnTitleScreen()
     {
@@ -43,7 +45,9 @@ public class Mod : BloonsTD6Mod
 
     public override void OnRoundEnd()
     {
-        SalariedMonkeys.Instance.PaySalaries();
+        _isOnRoundEnd = true;
+        try { SalariedMonkeys.Instance.PaySalaries(); }
+        finally { _isOnRoundEnd = false; }
     }
     
     public override void OnMatchEnd()
@@ -56,9 +60,19 @@ public class Mod : BloonsTD6Mod
     // Hooks for updating cash display.
     public override void OnTowerCreated(Tower tower, Entity target, Model modelToUse) => _cashDisplay?.OnCashChanged();
 
-    public override void OnTowerDestroyed(Tower tower) => _cashDisplay?.OnCashChanged();
-
     public override void OnTowerUpgraded(Tower tower, string upgradeName, TowerModel newBaseTowerModel) => _cashDisplay?.OnCashChanged();
+
+    public override void OnTowerDestroyed(Tower tower)
+    {
+        // Make the user pay for the tower for the round if selling before round end.
+        if (!_isOnRoundEnd)
+        {
+            var cost = SalariedMonkeys.Instance.GetTowerInfo(tower).TotalCost;
+            BloonsApi.Instance.AddCash(-_modSettings.CalculateCost(cost));
+        }
+
+        _cashDisplay?.OnCashChanged();
+    }
 
     // Cash display on top of screen
     public static void AfterCashDisplay_OnCashChanged(CashDisplay instance)
