@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Models;
 using Assets.Scripts.Models.Towers;
-using Assets.Scripts.Simulation;
 using Assets.Scripts.Simulation.Objects;
 using Assets.Scripts.Simulation.Towers;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
@@ -10,9 +9,6 @@ using Assets.Scripts.Unity.UI_New.Upgrade;
 using BloonsTD6.Mod.SalariedMonkeys.Implementation;
 using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BTD_Mod_Helper.Api.ModOptions;
-using HarmonyLib;
-using UnhollowerBaseLib;
-using UnityEngine;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 [assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]

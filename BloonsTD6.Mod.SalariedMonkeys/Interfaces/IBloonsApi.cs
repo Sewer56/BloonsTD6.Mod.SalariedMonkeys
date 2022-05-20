@@ -20,10 +20,4 @@ public interface IBloonsApi
     /// Returns a list of currently placed towers.
     /// </summary>
     List<ISalariedTower> GetTowers();
-
-    /// <summary>
-    /// Sells a given tower in question.
-    /// </summary>
-    /// <param name="tower">The tower to sell.</param>
-    void SellTower(ISalariedTower tower);
 }

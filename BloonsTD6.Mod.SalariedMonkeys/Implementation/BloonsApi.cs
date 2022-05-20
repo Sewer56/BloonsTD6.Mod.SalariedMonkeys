@@ -25,10 +25,4 @@ internal class BloonsApi : IBloonsApi
 
         return list;
     }
-
-    public void SellTower(ISalariedTower tower)
-    {
-        var salaried = (SalariedTower)(tower);
-        InGame.instance.SellTower(salaried.BaseTower);
-    }
 }

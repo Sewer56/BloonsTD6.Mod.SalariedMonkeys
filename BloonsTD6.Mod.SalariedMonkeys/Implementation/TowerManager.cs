@@ -1,5 +1,4 @@
-﻿using System.Runtime;
-using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
+﻿using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
 
@@ -71,7 +70,7 @@ public class TowerManager
                 break;
 
             salaryGained += tower.GetSalary(Settings);
-            BloonsApi.SellTower(tower);
+            tower.Sell();
             towers.Remove(tower);
         }
 
