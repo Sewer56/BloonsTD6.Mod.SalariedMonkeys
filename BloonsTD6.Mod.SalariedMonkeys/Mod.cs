@@ -90,14 +90,17 @@ public class Mod : BloonsTD6Mod
     }
 
     // Upgrade button inside left/right menu
-    public static void AfterUpgradeButton_Update(UpgradeButton instance)
+    public static void AfterUpgradeButton_UpdateCostVisuals(UpgradeButton instance)
     {
+        // Show correct price.
         var upgrade = instance.upgrade;
         if (upgrade == null)
             return;
 
         var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetUpgradeCost(upgrade));
         instance.Cost.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
+        if (BloonsApi.Instance.GetCash() < upgradeCost)
+            instance.upgradeStatus = UpgradeButton.UpgradeStatus.CanNotAfford;
     }
 
     // Selection menu on right/left hand side. Sell text.

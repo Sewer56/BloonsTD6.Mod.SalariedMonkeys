@@ -15,10 +15,10 @@ public class TowerPurchaseButtonHooks
 }
 
 [HarmonyPatch(typeof(UpgradeButton), nameof(UpgradeButton.UpdateCostVisuals))]
-public class UpdateCostOverride
+public class UpgradeButtonUpdateCostVisualsOverride
 {
     [HarmonyPostfix]
-    public static void PostFix(UpgradeButton __instance) => Mod.AfterUpgradeButton_Update(__instance);
+    public static void PostFix(UpgradeButton __instance) => Mod.AfterUpgradeButton_UpdateCostVisuals(__instance);
 }
 
 [HarmonyPatch(typeof(TowerSelectionMenu), nameof(TowerSelectionMenu.OnUpdate))]
