@@ -20,9 +20,20 @@ internal class BloonsApi : IBloonsApi
         
         foreach (var tower in towers)
         {
-            list.Add(new SalariedTower(tower.tower, SalariedMonkeys.Instance.GetTowerInfo(tower.tower).TotalCost));
+            list.Add(new SalariedTower(tower.tower, SalariedMonkeys.Instance.GetTowerInfo(tower.tower)));
         }
 
         return list;
+    }
+
+    public bool? ToggleSelling(bool allowSelling)
+    {
+        var model = InGame.instance.GetGameModel();
+        if (model == null)
+            return default;
+
+        var originalSellEnabled = model.towerSellEnabled;
+        model.towerSellEnabled = allowSelling;
+        return originalSellEnabled;
     }
 }

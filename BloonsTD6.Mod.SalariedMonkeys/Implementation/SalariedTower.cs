@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Simulation.Towers;
 using Assets.Scripts.Unity.UI_New.InGame;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
+using BloonsTD6.Mod.SalariedMonkeys.Structures;
 using BTD_Mod_Helper.Extensions;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
@@ -8,15 +9,17 @@ namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
 internal class SalariedTower : ISalariedTower
 {
     public Tower BaseTower { get; }
-    public float TotalCost { get; }
+    public TowerInfo TowerInfo { get; }
 
-    public SalariedTower(Tower baseTower, float totalCost)
+    public SalariedTower(Tower baseTower, TowerInfo towerInfo)
     {
         BaseTower = baseTower;
-        TotalCost = totalCost;
+        TowerInfo = towerInfo;
     }
 
-    public float GetTotalCost() => TotalCost;
+    public TowerInfo GetTowerInfo() => TowerInfo;
+
+    public float GetTotalCost() => TowerInfo.TotalCost;
 
     public void Sell() => InGame.instance.SellTower(BaseTower);
 }

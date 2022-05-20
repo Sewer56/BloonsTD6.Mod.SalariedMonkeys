@@ -6,7 +6,7 @@ internal class FakeBloonsApi : IBloonsApi
 {
     public double Cash;
     public List<ISalariedTower> Towers;
-    public int TowersSold;
+    public bool AllowSelling;
 
     public FakeBloonsApi(double cash, List<ISalariedTower> towers)
     {
@@ -19,4 +19,11 @@ internal class FakeBloonsApi : IBloonsApi
     public void AddCash(double amount) => Cash += amount;
 
     public List<ISalariedTower> GetTowers() => Towers;
+
+    public bool? ToggleSelling(bool allowSelling)
+    {
+        var original = AllowSelling;
+        AllowSelling = allowSelling;
+        return original;
+    }
 }

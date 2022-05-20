@@ -20,4 +20,10 @@ public interface IBloonsApi
     /// Returns a list of currently placed towers.
     /// </summary>
     List<ISalariedTower> GetTowers();
+
+    /// <summary>
+    /// Toggles whether selling is enabled or not.
+    /// </summary>
+    /// <returns>Original value declaring if selling is allowed or not.</returns>
+    bool? ToggleSelling(bool allowSelling);
 }

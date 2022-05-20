@@ -2,19 +2,20 @@
 using Assets.Scripts.Models.Towers.Upgrades;
 using Assets.Scripts.Simulation.Towers;
 using Assets.Scripts.Unity;
-using Assets.Scripts.Unity.UI_New.InGame;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
+using BloonsTD6.Mod.SalariedMonkeys.Structures;
 using BTD_Mod_Helper.Extensions;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
 
-internal class SalariedMonkeys
+public class SalariedMonkeys
 {
     /// <summary>
     /// Singleton instance of this class.
     /// </summary>
     public static readonly SalariedMonkeys Instance = new SalariedMonkeys();
+
     public TowerManager TowerManager { get; private set; } = null!;
 
     private Dictionary<string, float> _upgradeToCost = new Dictionary<string, float>();
@@ -98,13 +99,7 @@ internal class SalariedMonkeys
     public void PaySalaries()
     {
         // Enable selling temporarily if necessary.
-        var model       = InGame.instance.GetGameModel();
-        var sellEnabled = false;
-        if (model != null)
-        {
-            sellEnabled = model.towerSellEnabled;
-            model.towerSellEnabled = true;
-        }
+        var originalSellState = Api.ToggleSelling(true);
 
         try
         {
@@ -116,26 +111,8 @@ internal class SalariedMonkeys
         }
         finally
         {
-            if (model != null)
-                model.towerSellEnabled = sellEnabled;
+            if (originalSellState.HasValue)
+                Api.ToggleSelling(originalSellState.Value);
         }
     }
-}
-
-public class TowerInfo
-{
-    /// <summary>
-    /// Total cost of the tower, including upgrades.
-    /// </summary>
-    public float TotalCost => TowerCost + UpgradeCost;
-
-    /// <summary>
-    /// Cost of only the tower itself.
-    /// </summary>
-    public float TowerCost;
-
-    /// <summary>
-    /// Cost of only upgrades.
-    /// </summary>
-    public float UpgradeCost;
 }
