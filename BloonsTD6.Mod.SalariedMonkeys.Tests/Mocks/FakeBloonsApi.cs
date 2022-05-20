@@ -7,6 +7,7 @@ internal class FakeBloonsApi : IBloonsApi
     public double Cash;
     public List<ISalariedTower> Towers;
     public bool AllowSelling;
+    public int TowersSold;
 
     public FakeBloonsApi(double cash, List<ISalariedTower> towers)
     {

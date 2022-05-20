@@ -1,7 +1,5 @@
-using System.Runtime.CompilerServices;
 using BloonsTD6.Mod.SalariedMonkeys.Implementation;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
-using BloonsTD6.Mod.SalariedMonkeys.Tests.Mocks;
 using static BloonsTD6.Mod.SalariedMonkeys.Tests.TestUtilities;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Tests;
@@ -47,37 +45,15 @@ public class TowerManagerTests
         const float costPercentPerRound = 0.05f;
 
         // Arrange
-        var towersSold = new StrongBox<int>(0);
-        var fakeBloonsApi = new FakeBloonsApi(10000.0f, new List<ISalariedTower>()
-        {
-            // Unsorted to test sorting part of selling
-            CreateMock<ISalariedTower>(tower =>
-            {
-                tower.Setup(x => x.GetTotalCost()).Returns(4000.0f);
-                tower.Setup(x => x.Sell()).Callback(() => towersSold.Value += 1);
-            }), // 200
-            CreateMock<ISalariedTower>(tower =>
-            {
-                tower.Setup(x => x.GetTotalCost()).Returns(1000.0f);
-                tower.Setup(x => x.Sell()).Callback(() => towersSold.Value += 1);
-            }), // 50
-            CreateMock<ISalariedTower>(tower =>
-            {
-                tower.Setup(x => x.GetTotalCost()).Returns(3000.0f);
-                tower.Setup(x => x.Sell()).Callback(() => towersSold.Value += 1);
-            }), // 150
-            CreateMock<ISalariedTower>(tower =>
-            {
-                tower.Setup(x => x.GetTotalCost()).Returns(2000.0f);
-                tower.Setup(x => x.Sell()).Callback(() => towersSold.Value += 1);
-            }), // 100
-        });
+        var fakeBloonsApi = CreateDefaultTestApi();
+        var initialTowerCount = fakeBloonsApi.Towers.Count;
 
         // Act
         var towerManager = new TowerManager(fakeBloonsApi, new ModSettings() { CostPercentPerRound = costPercentPerRound });
         towerManager.SellTowers(salaryRequired);
 
         // Assert
-        Assert.Equal(expectedTowersSold, towersSold.Value);
+        Assert.Equal(expectedTowersSold, fakeBloonsApi.TowersSold);
+        Assert.Equal(expectedTowersSold, initialTowerCount - fakeBloonsApi.Towers.Count); // Tests the mock itself.
     }
 }
