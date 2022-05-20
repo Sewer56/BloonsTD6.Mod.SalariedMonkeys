@@ -1,11 +1,18 @@
-﻿using Assets.Scripts.Unity.UI_New.InGame.Stats;
+﻿using Assets.Scripts.Models;
+using Assets.Scripts.Models.Towers;
+using Assets.Scripts.Simulation;
+using Assets.Scripts.Simulation.Objects;
+using Assets.Scripts.Simulation.Towers;
+using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
 using Assets.Scripts.Unity.UI_New.Upgrade;
 using BloonsTD6.Mod.SalariedMonkeys.Implementation;
+using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BTD_Mod_Helper.Api.ModOptions;
 using HarmonyLib;
 using UnhollowerBaseLib;
+using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 [assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
@@ -27,7 +34,8 @@ public class Mod : BloonsTD6Mod
     
     private static CashDisplay? _cashDisplay;
     private static ModSettings _modSettings = new ModSettings();
-    
+    private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
+
     public override void OnTitleScreen()
     {
         // Initialise Mod.
@@ -39,20 +47,30 @@ public class Mod : BloonsTD6Mod
     {
         SalariedMonkeys.Instance.PaySalaries();
     }
-
-    public override void OnUpdate()
-    {
-        // TODO: Why does catching exceptions not suppress them in log? Annoying.
-        // Update cash display string every frame.
-        try { _cashDisplay?.OnCashChanged(); }
-        catch (Il2CppException e) { /* Suppress errors */ }
-        catch (Exception e) { /* Suppress errors */ }
-    }
-
+    
     public override void OnMatchEnd()
     {
         // TODO: This is a hack! Find a better way to do this.
         _cashDisplay = null;
+        _cachedStringFormatter.Clear();
+    }
+
+    // Hooks for updating cash display.
+    public override void OnTowerCreated(Tower tower, Entity target, Model modelToUse) => _cashDisplay?.OnCashChanged();
+
+    public override void OnTowerDestroyed(Tower tower) => _cashDisplay?.OnCashChanged();
+
+    public override void OnTowerUpgraded(Tower tower, string upgradeName, TowerModel newBaseTowerModel) => _cashDisplay?.OnCashChanged();
+
+    // Cash display on top of screen
+    public static void AfterCashDisplay_OnCashChanged(CashDisplay instance)
+    {
+        _cashDisplay = instance;
+
+        var text = instance.text;
+        var rectTransform = text.rectTransform;
+        rectTransform.offsetMax = new UnityEngine.Vector2(2000.0f, rectTransform.offsetMax.y); // Extend max text width
+        text.text += _cachedStringFormatter.GetSalary((float) SalariedMonkeys.Instance.TowerManager.GetTotalSalary());
     }
 
     // Button to purchase tower on right side.
@@ -78,10 +96,10 @@ public class Mod : BloonsTD6Mod
             return;
 
         var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetUpgradeCost(upgrade));
-        instance.Cost.text = $"{upgradeCost:#####.#}";
+        instance.Cost.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
     }
 
-    // Selection menu on right/left hand side
+    // Selection menu on right/left hand side. Sell text.
     public static void AfterTowerSelectionMenu_OnUpdate(TowerSelectionMenu instance)
     {
         if (instance.sellText == null || instance.selectedTower == null)
@@ -92,31 +110,17 @@ public class Mod : BloonsTD6Mod
             return;
 
         var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetTowerInfo(tower).TotalCost);
-        instance.sellText.text = $"{upgradeCost:#####.#}";
-    }
-
-    // Cash display on top of screen
-    public static void AfterCashDisplay_OnCashChanged(CashDisplay instance)
-    {
-        _cashDisplay = instance;
-
-        var text = instance.text;
-        var rectTransform = text.rectTransform;
-        rectTransform.offsetMax = new UnityEngine.Vector2(2000.0f, 50.0f);
-        text.text += $" (-{SalariedMonkeys.Instance.TowerManager.GetTotalSalary():####0.#})";
+        instance.sellText.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
     }
 
     // Upgrade menu.
     public static void AfterUpgradeDetails_UpdateSelected(SelectedUpgrade selectedUpgrade)
     {
         var upgradeDetails = selectedUpgrade.selectedDetails;
-        if (upgradeDetails == null)
-            return;
-
-        if (upgradeDetails.upgrade == null)
+        if (upgradeDetails == null || upgradeDetails.upgrade == null)
             return;
 
         var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetUpgradeCost(upgradeDetails.upgrade));
-        selectedUpgrade.unlockCost.text = $"{upgradeCost:#####.#}";
+        selectedUpgrade.unlockCost.text = _cachedStringFormatter.GetUpgradeCost(upgradeCost);
     }
 }
