@@ -4,9 +4,15 @@ $paths = @(
     ($path + '\MelonLoader\Managed\Assembly-CSharp.dll'),
     ($path + '\MelonLoader\Managed\UnhollowerBaseLib.dll'),
     ($path + '\MelonLoader\Managed\Il2Cppmscorlib.dll'),
+    ($path + '\MelonLoader\Managed\UnityEngine.CoreModule.dll'),
     ($path + '\MelonLoader\Managed\Il2CppSystem.dll'),
-    ($path + '\MelonLoader\MelonLoader.dll')
-    ($path + '\Mods\BloonsTD6 Mod Helper.dll')
+    ($path + '\MelonLoader\Managed\Unity.TextMeshPro.dll'),
+	($path + '\MelonLoader\Managed\UnityEngine.dll'),
+	($path + '\MelonLoader\Managed\UnityEngine.UI.dll'),
+	($path + '\MelonLoader\Managed\UnityEngine.IMGUIModule.dll'),
+    ($path + '\MelonLoader\MelonLoader.dll'),
+    ($path + '\MelonLoader\0Harmony.dll'),
+	($path + '\Mods\BloonsTD6 Mod Helper.dll')
 )
 
 function MakeReferenceAssembly {
