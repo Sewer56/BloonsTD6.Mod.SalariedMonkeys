@@ -39,7 +39,8 @@ public class Mod : BloonsTD6Mod
     public override void OnTitleScreen()
     {
         // Initialise Mod.
-        CostPercentPerRound.OnValueChanged.Add(d => _modSettings.CostPercentPerRound = (float)(d / 100.0));
+        OnPreferencesLoaded();
+        CostPercentPerRound.OnValueChanged.Add(SetCostPerRoundFromSlider);
         SalariedMonkeys.Instance.Initialise(new TowerManager(BloonsApi.Instance, _modSettings));
     }
 
@@ -123,4 +124,6 @@ public class Mod : BloonsTD6Mod
         var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetUpgradeCost(upgradeDetails.upgrade));
         selectedUpgrade.unlockCost.text = _cachedStringFormatter.GetUpgradeCost(upgradeCost);
     }
+
+    private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);
 }
