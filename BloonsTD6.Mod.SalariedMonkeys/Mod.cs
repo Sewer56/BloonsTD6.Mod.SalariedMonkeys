@@ -12,6 +12,7 @@ using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BTD_Mod_Helper.Api.ModOptions;
 using HarmonyLib;
 using UnhollowerBaseLib;
+using UnityEngine;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 [assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
@@ -126,6 +127,14 @@ public class Mod : BloonsTD6Mod
 
         var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetUpgradeCost(upgradeDetails.upgrade));
         selectedUpgrade.unlockCost.text = _cachedStringFormatter.GetUpgradeCost(upgradeCost);
+    }
+
+    // IMF Loan Display, We need to move icon right so doesn't interfere with our cash counter.
+    public static void LoanDisplay_Initialise(LoanDisplay loanDisplay)
+    {
+        var pos = loanDisplay.transform.position;
+        pos.x += 100;
+        loanDisplay.transform.position = pos;
     }
 
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);

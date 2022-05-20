@@ -35,6 +35,13 @@ public class CashDisplayHooks
     public static void Postfix(CashDisplay __instance) => Mod.AfterCashDisplay_OnCashChanged(__instance);
 }
 
+[HarmonyPatch(typeof(LoanDisplay), nameof(LoanDisplay.Initialise))]
+public class LoanDisplayHooks
+{
+    [HarmonyPostfix]
+    public static void Postfix(LoanDisplay __instance) => Mod.LoanDisplay_Initialise(__instance);
+}
+
 [HarmonyPatch(typeof(SelectedUpgrade), nameof(UpgradeDetails.SetUpgrade))]
 public class UpgradeDetailsHooks
 {
