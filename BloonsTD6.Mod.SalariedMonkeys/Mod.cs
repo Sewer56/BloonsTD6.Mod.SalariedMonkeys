@@ -3,7 +3,6 @@ using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Simulation.Objects;
 using Assets.Scripts.Simulation.Towers;
 using Assets.Scripts.Unity;
-using Assets.Scripts.Unity.UI_New.InGame;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
@@ -18,6 +17,10 @@ using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
 
+/// <summary>
+/// This class contains all code specific to BTD6.
+/// As such, it is not testable without going ingame.
+/// </summary>
 public class Mod : BloonsTD6Mod
 {
     // Github API URL used to check if this mod is up to date. For example:
@@ -30,11 +33,11 @@ public class Mod : BloonsTD6Mod
         maxValue = 100.0,
         isSlider = true
     };
-    
+
+    private static SalariedMonkeys SalariedMonkeys => SalariedMonkeys.Instance;
     private static CashDisplay? _cashDisplay;
     private static ModSettings _modSettings = new ModSettings();
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
-    private static bool _isOnRoundEnd = false;
 
     public override void OnTitleScreen()
     {
@@ -42,17 +45,12 @@ public class Mod : BloonsTD6Mod
         OnPreferencesLoaded();
         CostPercentPerRound.OnValueChanged.Add(SetCostPerRoundFromSlider);
         var model = Game.instance.model;
-        SalariedMonkeys.Instance.Construct(new TowerManager(BloonsApi.Instance, _modSettings));
-        SalariedMonkeys.Instance.Initialise(model.towers, model.upgrades);
+        SalariedMonkeys.Construct(new TowerManager(BloonsApi.Instance, _modSettings));
+        SalariedMonkeys.Initialise(model.towers, model.upgrades);
     }
 
-    public override void OnRoundEnd()
-    {
-        _isOnRoundEnd = true;
-        try { SalariedMonkeys.Instance.PaySalaries(); }
-        finally { _isOnRoundEnd = false; }
-    }
-    
+    public override void OnRoundEnd() => SalariedMonkeys.PaySalaries();
+
     public override void OnMatchEnd()
     {
         // TODO: This is a hack! Find a better way to do this.
@@ -68,12 +66,7 @@ public class Mod : BloonsTD6Mod
     public override void OnTowerDestroyed(Tower tower)
     {
         // Make the user pay for the tower for the round if selling before round end.
-        if (!_isOnRoundEnd)
-        {
-            var cost = SalariedMonkeys.Instance.GetTowerInfo(tower).TotalCost;
-            BloonsApi.Instance.AddCash(-_modSettings.CalculateCost(cost));
-        }
-
+        SalariedMonkeys.SellTower(tower);
         _cashDisplay?.OnCashChanged();
     }
 
@@ -85,7 +78,7 @@ public class Mod : BloonsTD6Mod
         var text = instance.text;
         var rectTransform = text.rectTransform;
         rectTransform.offsetMax = new UnityEngine.Vector2(2000.0f, rectTransform.offsetMax.y); // Extend max text width
-        text.text += _cachedStringFormatter.GetSalary((float) SalariedMonkeys.Instance.TowerManager.GetTotalSalary());
+        text.text += _cachedStringFormatter.GetSalary((float)SalariedMonkeys.TowerManager.GetTotalSalary());
     }
 
     // Button to purchase tower on right side.
@@ -94,7 +87,7 @@ public class Mod : BloonsTD6Mod
         if (instance.towerModel == null)
             return;
         
-        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetTowerInfo(instance.towerModel).TotalCost);
+        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.GetTowerInfo(instance.towerModel).TotalCost);
         if (instance.cost == upgradeCost)
             return;
 
@@ -111,9 +104,9 @@ public class Mod : BloonsTD6Mod
         if (upgrade == null)
             return;
 
-        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetUpgradeCost(upgrade));
+        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.GetUpgradeCost(upgrade));
         instance.Cost.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
-        if (BloonsApi.Instance.GetCash() < upgradeCost)
+        if (SalariedMonkeys.Api.GetCash() < upgradeCost)
             instance.upgradeStatus = UpgradeButton.UpgradeStatus.CanNotAfford;
     }
 
@@ -127,7 +120,7 @@ public class Mod : BloonsTD6Mod
         if (tower == null)
             return;
 
-        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetTowerInfo(tower).TotalCost);
+        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.GetTowerInfo(tower).TotalCost);
         instance.sellText.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
     }
 
@@ -138,7 +131,7 @@ public class Mod : BloonsTD6Mod
         if (upgradeDetails == null || upgradeDetails.upgrade == null)
             return;
 
-        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.Instance.GetUpgradeCost(upgradeDetails.upgrade));
+        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.GetUpgradeCost(upgradeDetails.upgrade));
         selectedUpgrade.unlockCost.text = _cachedStringFormatter.GetUpgradeCost(upgradeCost);
     }
 

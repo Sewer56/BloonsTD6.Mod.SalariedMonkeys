@@ -15,12 +15,21 @@ public class SalariedMonkeys
     /// </summary>
     public static readonly SalariedMonkeys Instance = new SalariedMonkeys();
 
+    /// <summary>
+    /// The tower manager associated with this mod instance.
+    /// </summary>
     public ITowerManager TowerManager { get; private set; } = null!;
+
+    /// <summary>
+    /// This is set to true when salaries are currently being paid.
+    /// </summary>
+    public bool IsPayingSalaries { get; private set; } = false;
+
+    public ModSettings Settings => TowerManager.Settings;
+    public IBloonsApi Api => TowerManager.BloonsApi;
 
     private Dictionary<string, float> _upgradeToCost = new Dictionary<string, float>();
     private Dictionary<string, TowerInfo> _towerToCost = new Dictionary<string, TowerInfo>();
-
-    private IBloonsApi Api => TowerManager.BloonsApi;
 
     /// <summary>
     /// Constructs this instance of the class.
@@ -98,7 +107,7 @@ public class SalariedMonkeys
 
         return default;
     }
-
+    
     /// <summary>
     /// Pays the salaries to all the monkeys.
     /// </summary>
@@ -106,6 +115,7 @@ public class SalariedMonkeys
     public void PaySalaries()
     {
         // Enable selling temporarily if necessary.
+        IsPayingSalaries = true;
         var originalSellState = Api.ToggleSelling(true);
 
         try
@@ -118,8 +128,22 @@ public class SalariedMonkeys
         }
         finally
         {
+            IsPayingSalaries = false;
             if (originalSellState.HasValue)
                 Api.ToggleSelling(originalSellState.Value);
         }
+    }
+
+    /// <summary>
+    /// Event handler for when the user sells a tower.
+    /// </summary>
+    /// <param name="tower">The tower to be sold.</param>
+    public void SellTower(Tower tower)
+    {
+        if (IsPayingSalaries) 
+            return;
+
+        var cost = GetTowerInfo(tower).TotalCost;
+        Api.AddCash(-Settings.CalculateCost(cost));
     }
 }
