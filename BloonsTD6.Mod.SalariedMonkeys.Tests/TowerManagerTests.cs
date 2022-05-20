@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using BloonsTD6.Mod.SalariedMonkeys.Implementation;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 using BloonsTD6.Mod.SalariedMonkeys.Tests.Mocks;
@@ -46,14 +47,30 @@ public class TowerManagerTests
         const float costPercentPerRound = 0.05f;
 
         // Arrange
-        int towersSold = 0;
+        var towersSold = new StrongBox<int>(0);
         var fakeBloonsApi = new FakeBloonsApi(10000.0f, new List<ISalariedTower>()
         {
             // Unsorted to test sorting part of selling
-            CreateMock<ISalariedTower>(tower => tower.Setup(x => x.GetTotalCost()).Returns(4000.0f)), // 200
-            CreateMock<ISalariedTower>(tower => tower.Setup(x => x.GetTotalCost()).Returns(1000.0f)), // 50
-            CreateMock<ISalariedTower>(tower => tower.Setup(x => x.GetTotalCost()).Returns(3000.0f)), // 150
-            CreateMock<ISalariedTower>(tower => tower.Setup(x => x.GetTotalCost()).Returns(2000.0f)), // 100
+            CreateMock<ISalariedTower>(tower =>
+            {
+                tower.Setup(x => x.GetTotalCost()).Returns(4000.0f);
+                tower.Setup(x => x.Sell()).Callback(() => towersSold.Value += 1);
+            }), // 200
+            CreateMock<ISalariedTower>(tower =>
+            {
+                tower.Setup(x => x.GetTotalCost()).Returns(1000.0f);
+                tower.Setup(x => x.Sell()).Callback(() => towersSold.Value += 1);
+            }), // 50
+            CreateMock<ISalariedTower>(tower =>
+            {
+                tower.Setup(x => x.GetTotalCost()).Returns(3000.0f);
+                tower.Setup(x => x.Sell()).Callback(() => towersSold.Value += 1);
+            }), // 150
+            CreateMock<ISalariedTower>(tower =>
+            {
+                tower.Setup(x => x.GetTotalCost()).Returns(2000.0f);
+                tower.Setup(x => x.Sell()).Callback(() => towersSold.Value += 1);
+            }), // 100
         });
 
         // Act
@@ -61,6 +78,6 @@ public class TowerManagerTests
         towerManager.SellTowers(salaryRequired);
 
         // Assert
-        Assert.Equal(expectedTowersSold, fakeBloonsApi.TowersSold);
+        Assert.Equal(expectedTowersSold, towersSold.Value);
     }
 }

@@ -19,10 +19,4 @@ internal class FakeBloonsApi : IBloonsApi
     public void AddCash(double amount) => Cash += amount;
 
     public List<ISalariedTower> GetTowers() => Towers;
-
-    public void SellTower(ISalariedTower tower)
-    {
-        if (Towers.Remove(tower))
-            TowersSold += 1;
-    }
 }
