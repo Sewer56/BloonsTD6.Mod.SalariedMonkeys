@@ -58,5 +58,6 @@ internal class CachedStringFormatter
     {
         _floatToCostDictionary.Clear();
         _floatToSalaryDictionary.Clear();
+        _floatToWithDollarDictionary.Clear();
     }
 }
