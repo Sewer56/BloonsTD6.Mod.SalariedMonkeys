@@ -2,19 +2,12 @@
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
 
-/// <summary>
-/// Class that manages all the towers controlled by Monkeys for Hire.
-/// </summary>
-public class TowerManager
+public class TowerManager : ITowerManager
 {
-    /// <summary>
-    /// The API implementation used to purchase/sell stuff in Bloons.
-    /// </summary>
+    /// <inheritdoc/>
     public IBloonsApi BloonsApi { get; set; }
 
-    /// <summary>
-    /// Settings of the mod itself.
-    /// </summary>
+    /// <inheritdoc/>
     public ModSettings Settings { get; set; }
 
     public TowerManager(IBloonsApi bloonsApi, ModSettings settings)
@@ -23,19 +16,14 @@ public class TowerManager
         Settings = settings;
     }
 
-    /// <summary>
-    /// Returns the amount of available salary.
-    /// </summary>
-    /// <returns></returns>
+    /// <inheritdoc/>
     public double GetAvailableSalary(out double totalSalary)
     {
         totalSalary = GetTotalSalary();
         return BloonsApi.GetCash() - totalSalary;
     }
 
-    /// <summary>
-    /// Returns the amount of payable money to the monkeys.
-    /// </summary>
+    /// <inheritdoc/>
     public double GetTotalSalary()
     {
         var towers = BloonsApi.GetTowers();
@@ -47,12 +35,8 @@ public class TowerManager
         return totalSalary;
     }
 
-    /// <summary>
-    /// Sells all towers, starting from cheapest tower until salary demand is met.
-    /// </summary>
-    /// <param name="requiredSalary">The required amount of money to be made.</param>
-    /// <remarks>To be used in co-op!</remarks>
-    /// <returns>Amount of new payable salary gained.</returns>
+
+    /// <inheritdoc/>
     public double SellTowers(float requiredSalary)
     {
         // Get towers in ascending order.

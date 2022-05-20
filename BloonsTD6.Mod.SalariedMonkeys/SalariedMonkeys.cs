@@ -5,7 +5,6 @@ using Assets.Scripts.Unity;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 using BloonsTD6.Mod.SalariedMonkeys.Structures;
 using BTD_Mod_Helper.Extensions;
-using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
 
@@ -16,7 +15,7 @@ public class SalariedMonkeys
     /// </summary>
     public static readonly SalariedMonkeys Instance = new SalariedMonkeys();
 
-    public TowerManager TowerManager { get; private set; } = null!;
+    public ITowerManager TowerManager { get; private set; } = null!;
 
     private Dictionary<string, float> _upgradeToCost = new Dictionary<string, float>();
     private Dictionary<string, TowerInfo> _towerToCost = new Dictionary<string, TowerInfo>();
@@ -24,16 +23,24 @@ public class SalariedMonkeys
     private IBloonsApi Api => TowerManager.BloonsApi;
 
     /// <summary>
-    /// Constructs a given instance of the mod.
+    /// Constructs this instance of the class.
     /// </summary>
-    /// <param name="towerManager">The tower manager to initialise this instance with.</param>
-    public void Initialise(TowerManager towerManager)
+    /// <param name="towerManager">The tower manager to use for the class.</param>
+    public void Construct(ITowerManager towerManager)
     {
         TowerManager = towerManager;
+    }
 
+    /// <summary>
+    /// Constructs a given instance of the mod.
+    /// Call this after calling <see cref="Construct"/>.
+    /// </summary>
+    /// <param name="towers">Provides access to all of the game towers.</param>
+    /// <param name="upgrades">Provides access to all of the game upgrades.</param>
+    public void Initialise(IEnumerable<TowerModel> towers, IEnumerable<UpgradeModel> upgrades)
+    {
         // Set tower costs.
-        var model = Game.instance.model;
-        foreach (var tower in model.towers)
+        foreach (var tower in towers)
         {
             var id          = tower.GetTowerId();
             var towerCost   = tower.cost;
@@ -55,7 +62,7 @@ public class SalariedMonkeys
         }
 
         // Set all upgrades free.
-        foreach (var upgrade in Game.instance.model.upgrades)
+        foreach (var upgrade in upgrades)
         {
             _upgradeToCost[upgrade.name] = upgrade.cost;
             upgrade.cost = 0;

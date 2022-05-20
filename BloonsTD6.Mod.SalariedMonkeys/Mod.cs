@@ -2,6 +2,7 @@
 using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Simulation.Objects;
 using Assets.Scripts.Simulation.Towers;
+using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.UI_New.InGame;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
@@ -40,7 +41,9 @@ public class Mod : BloonsTD6Mod
         // Initialise Mod.
         OnPreferencesLoaded();
         CostPercentPerRound.OnValueChanged.Add(SetCostPerRoundFromSlider);
-        SalariedMonkeys.Instance.Initialise(new TowerManager(BloonsApi.Instance, _modSettings));
+        var model = Game.instance.model;
+        SalariedMonkeys.Instance.Construct(new TowerManager(BloonsApi.Instance, _modSettings));
+        SalariedMonkeys.Instance.Initialise(model.towers, model.upgrades);
     }
 
     public override void OnRoundEnd()
