@@ -14,7 +14,7 @@ public class TowerPurchaseButtonHooks
     public static void PostFix(TowerPurchaseButton __instance) => Mod.AfterTowerPurchaseButton_Update(__instance);
 }
 
-[HarmonyPatch(typeof(UpgradeButton), nameof(UpgradeButton.Update))]
+[HarmonyPatch(typeof(UpgradeButton), nameof(UpgradeButton.UpdateCostVisuals))]
 public class UpdateCostOverride
 {
     [HarmonyPostfix]
