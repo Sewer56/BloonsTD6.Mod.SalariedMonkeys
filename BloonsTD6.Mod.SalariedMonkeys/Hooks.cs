@@ -21,7 +21,7 @@ public class UpgradeButtonUpdateCostVisualsOverride
     public static void PostFix(UpgradeButton __instance) => Mod.AfterUpgradeButton_UpdateCostVisuals(__instance);
 }
 
-[HarmonyPatch(typeof(TowerSelectionMenu), nameof(TowerSelectionMenu.OnUpdate))]
+[HarmonyPatch(typeof(TowerSelectionMenu), nameof(TowerSelectionMenu.UpdateTower))]
 public class TowerSelectionMenuHooks
 {
     [HarmonyPostfix]
