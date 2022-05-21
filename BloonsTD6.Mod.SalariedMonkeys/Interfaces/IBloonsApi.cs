@@ -26,4 +26,9 @@ public interface IBloonsApi
     /// </summary>
     /// <returns>Original value declaring if selling is allowed or not.</returns>
     bool? ToggleSelling(bool allowSelling);
+
+    /// <summary>
+    /// True if currently active in a round, else false.
+    /// </summary>
+    bool IsRoundActive();
 }

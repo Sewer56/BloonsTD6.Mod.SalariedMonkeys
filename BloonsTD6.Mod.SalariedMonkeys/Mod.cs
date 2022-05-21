@@ -44,9 +44,7 @@ public class Mod : BloonsTD6Mod
         // Initialise Mod.
         OnPreferencesLoaded();
         CostPercentPerRound.OnValueChanged.Add(SetCostPerRoundFromSlider);
-        var model = Game.instance.model;
-        SalariedMonkeys.Construct(new TowerManager(BloonsApi.Instance, _modSettings));
-        SalariedMonkeys.Initialise(model.towers, model.upgrades);
+        SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings));
     }
 
     public override void OnRoundEnd() => SalariedMonkeys.PaySalaries();
@@ -66,7 +64,7 @@ public class Mod : BloonsTD6Mod
     public override void OnTowerDestroyed(Tower tower)
     {
         // Make the user pay for the tower for the round if selling before round end.
-        SalariedMonkeys.SellTower(tower);
+        SalariedMonkeys.OnSellTower(tower);
         _cashDisplay?.OnCashChanged();
     }
 

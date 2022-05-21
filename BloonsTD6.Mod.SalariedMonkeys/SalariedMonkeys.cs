@@ -28,54 +28,20 @@ public class SalariedMonkeys
     public ModSettings Settings => TowerManager.Settings;
     public IBloonsApi Api => TowerManager.BloonsApi;
 
-    private Dictionary<string, float> _upgradeToCost = new Dictionary<string, float>();
-    private Dictionary<string, TowerInfo> _towerToCost = new Dictionary<string, TowerInfo>();
+    private Dictionary<string, float> _upgradeToCost = null!;
+    private Dictionary<string, TowerInfo> _towerToCost = null!;
 
     /// <summary>
     /// Constructs this instance of the class.
     /// </summary>
     /// <param name="towerManager">The tower manager to use for the class.</param>
-    public void Construct(ITowerManager towerManager)
+    /// <param name="upgradeToCost">Maps all tower upgrade names to corresponding costs.</param>
+    /// <param name="towerToCost">Maps all corresponding to costs.</param>
+    public void Construct(ITowerManager towerManager, Dictionary<string, float> upgradeToCost, Dictionary<string, TowerInfo> towerToCost)
     {
-        TowerManager = towerManager;
-    }
-
-    /// <summary>
-    /// Constructs a given instance of the mod.
-    /// Call this after calling <see cref="Construct"/>.
-    /// </summary>
-    /// <param name="towers">Provides access to all of the game towers.</param>
-    /// <param name="upgrades">Provides access to all of the game upgrades.</param>
-    public void Initialise(IEnumerable<TowerModel> towers, IEnumerable<UpgradeModel> upgrades)
-    {
-        // Set tower costs.
-        foreach (var tower in towers)
-        {
-            var id          = tower.GetTowerId();
-            var towerCost   = tower.cost;
-            var upgradeCost = 0.0f;
-            
-            foreach (var upgrade in tower.appliedUpgrades)
-            {
-                var upgradeModel = Game.instance.model.GetUpgrade(upgrade);
-                upgradeCost += upgradeModel.cost;
-            }
-
-            _towerToCost[id] = new TowerInfo()
-            {
-                TowerCost   = towerCost,
-                UpgradeCost = upgradeCost
-            };
-            
-            tower.cost = 0;
-        }
-
-        // Set all upgrades free.
-        foreach (var upgrade in upgrades)
-        {
-            _upgradeToCost[upgrade.name] = upgrade.cost;
-            upgrade.cost = 0;
-        }
+        TowerManager  = towerManager;
+        _upgradeToCost = upgradeToCost;
+        _towerToCost   = towerToCost;
     }
 
     /// <summary>
@@ -138,12 +104,59 @@ public class SalariedMonkeys
     /// Event handler for when the user sells a tower.
     /// </summary>
     /// <param name="tower">The tower to be sold.</param>
-    public void SellTower(Tower tower)
+    public void OnSellTower(Tower tower)
     {
-        if (IsPayingSalaries) 
+        if (IsPayingSalaries || !Api.IsRoundActive()) 
             return;
 
         var cost = GetTowerInfo(tower).TotalCost;
         Api.AddCash(-Settings.CalculateCost(cost));
+    }
+}
+
+public static class SalariedMonkeysExtensions
+{
+    /// <summary>
+    /// Constructs the mod from the current game instance.
+    /// </summary>
+    /// <param name="monkeys"></param>
+    /// <param name="towerManager">The tower manager to use for the class.</param>
+    public static void ConstructInGame(this SalariedMonkeys monkeys, ITowerManager towerManager)
+    {
+        var model = Game.instance.model;
+        var towerToCost = new Dictionary<string, TowerInfo>();
+        var upgradeToCost = new Dictionary<string, float>();
+
+        // Set tower costs.
+        foreach (var tower in model.towers)
+        {
+            var id = tower.GetTowerId();
+            var towerCost = tower.cost;
+            var upgradeCost = 0.0f;
+
+            foreach (var upgrade in tower.appliedUpgrades)
+            {
+                var upgradeModel = Game.instance.model.GetUpgrade(upgrade);
+                upgradeCost += upgradeModel.cost;
+            }
+
+            towerToCost[id] = new TowerInfo()
+            {
+                TowerCost = towerCost,
+                UpgradeCost = upgradeCost
+            };
+
+            tower.cost = 0;
+        }
+
+        // Set all upgrades free.
+        foreach (var upgrade in model.upgrades)
+        {
+            upgradeToCost[upgrade.name] = upgrade.cost;
+            upgrade.cost = 0;
+        }
+
+        // Construct instance.
+        monkeys.Construct(towerManager, upgradeToCost, towerToCost);
     }
 }

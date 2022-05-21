@@ -8,6 +8,7 @@ internal class FakeBloonsApi : IBloonsApi
     public List<ISalariedTower> Towers;
     public bool AllowSelling;
     public int TowersSold;
+    public bool IsRoundActiveValue;
 
     public FakeBloonsApi(double cash, List<ISalariedTower> towers)
     {
@@ -27,4 +28,6 @@ internal class FakeBloonsApi : IBloonsApi
         AllowSelling = allowSelling;
         return original;
     }
+
+    public bool IsRoundActive() => IsRoundActiveValue;
 }

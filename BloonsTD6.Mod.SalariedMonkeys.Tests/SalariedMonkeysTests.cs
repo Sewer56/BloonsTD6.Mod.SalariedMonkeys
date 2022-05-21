@@ -21,7 +21,7 @@ public class SalariedMonkeysTests
         });
         
         var salariedMonkeys = new SalariedMonkeys();
-        salariedMonkeys.Construct(fakeTowerManager);
+        salariedMonkeys.Construct(fakeTowerManager, default!, default!);
         
         // Act & Assert
         // Test with allowSelling On
@@ -49,7 +49,7 @@ public class SalariedMonkeysTests
 
         var fakeTowerManager = towerManagerMock.Object;
         var salariedMonkeys  = new SalariedMonkeys();
-        salariedMonkeys.Construct(fakeTowerManager);
+        salariedMonkeys.Construct(fakeTowerManager, default!, default!);
 
         // Act & Assert
         // Test with allowSelling On

@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Unity.UI_New.InGame;
+using Assets.Scripts.Unity.UI_New.InGame.RightMenu;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 using BTD_Mod_Helper.Extensions;
 
@@ -36,4 +37,6 @@ internal class BloonsApi : IBloonsApi
         model.towerSellEnabled = allowSelling;
         return originalSellEnabled;
     }
+
+    public bool IsRoundActive() => InGame.instance.UnityToSimulation.AreRoundsActive();
 }
