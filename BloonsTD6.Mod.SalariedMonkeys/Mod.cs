@@ -45,6 +45,7 @@ public class Mod : BloonsTD6Mod
         OnPreferencesLoaded();
         CostPercentPerRound.OnValueChanged.Add(SetCostPerRoundFromSlider);
         SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings));
+        ApplySettings();
     }
 
     public override void OnRoundEnd() => SalariedMonkeys.PaySalaries();
@@ -141,5 +142,6 @@ public class Mod : BloonsTD6Mod
         loanDisplay.transform.position = pos;
     }
 
+    private void ApplySettings() => SetCostPerRoundFromSlider((double)CostPercentPerRound.GetValue());
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);
 }
