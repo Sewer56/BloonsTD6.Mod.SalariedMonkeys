@@ -15,6 +15,11 @@ $paths = @(
 	($path + '\Mods\BloonsTD6 Mod Helper.dll')
 )
 
+function CopyAssembly {
+    param ($Path, $OutFolder)
+	Copy-Item -Path "$Path" -Destination "$OutFolder"
+}
+
 function MakeReferenceAssembly {
 <#
 .SYNOPSIS
