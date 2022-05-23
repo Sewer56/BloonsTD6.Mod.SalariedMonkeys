@@ -9,6 +9,7 @@ internal class FakeBloonsApi : IBloonsApi
     public bool AllowSelling;
     public int TowersSold;
     public bool IsRoundActiveValue;
+    public float DifficultyCostMultiplier = 1.00f;
 
     public FakeBloonsApi(double cash, List<ISalariedTower> towers)
     {
@@ -30,4 +31,5 @@ internal class FakeBloonsApi : IBloonsApi
     }
 
     public bool IsRoundActive() => IsRoundActiveValue;
+    public float GetDifficultyCostMultiplier() => DifficultyCostMultiplier;
 }

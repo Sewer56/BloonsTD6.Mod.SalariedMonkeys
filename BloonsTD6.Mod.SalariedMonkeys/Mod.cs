@@ -55,6 +55,7 @@ public class Mod : BloonsTD6Mod
         // TODO: This is a hack! Find a better way to do this.
         _cashDisplay = null;
         _cachedStringFormatter.Clear();
+        BloonsApi.ResetCacheForNewMatch();
     }
 
     // Hooks for updating cash display.
@@ -86,7 +87,7 @@ public class Mod : BloonsTD6Mod
         if (instance.towerModel == null)
             return;
         
-        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.GetTowerInfo(instance.towerModel).TotalCost);
+        var upgradeCost = SalariedMonkeys.CalculateSalary(instance.towerModel);
         if (instance.cost == upgradeCost)
             return;
 
@@ -103,7 +104,7 @@ public class Mod : BloonsTD6Mod
         if (upgrade == null)
             return;
 
-        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.GetUpgradeCost(upgrade));
+        var upgradeCost = SalariedMonkeys.CalculateSalary(upgrade);
         instance.Cost.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
         if (SalariedMonkeys.Api.GetCash() < upgradeCost)
             instance.upgradeStatus = UpgradeButton.UpgradeStatus.CanNotAfford;
@@ -119,7 +120,7 @@ public class Mod : BloonsTD6Mod
         if (tower == null)
             return;
 
-        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.GetTowerInfo(tower).TotalCost);
+        var upgradeCost = SalariedMonkeys.CalculateSalary(tower.towerModel);
         instance.sellText.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
     }
 
@@ -130,7 +131,7 @@ public class Mod : BloonsTD6Mod
         if (upgradeDetails == null || upgradeDetails.upgrade == null)
             return;
 
-        var upgradeCost = _modSettings.CalculateCost(SalariedMonkeys.GetUpgradeCost(upgradeDetails.upgrade));
+        var upgradeCost = SalariedMonkeys.CalculateSalary(upgradeDetails.upgrade);
         selectedUpgrade.unlockCost.text = _cachedStringFormatter.GetUpgradeCost(upgradeCost);
     }
 

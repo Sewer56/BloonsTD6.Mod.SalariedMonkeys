@@ -30,7 +30,7 @@ public class TowerManager : ITowerManager
         var totalSalary = 0.0;
 
         foreach (var tower in towers)
-            totalSalary += tower.GetSalary(Settings);
+            totalSalary += tower.GetSalary(Settings, BloonsApi.GetDifficultyCostMultiplier());
 
         return totalSalary;
     }
@@ -53,7 +53,7 @@ public class TowerManager : ITowerManager
             if (tower == null)
                 break;
 
-            salaryGained += tower.GetSalary(Settings);
+            salaryGained += tower.GetSalary(Settings, BloonsApi.GetDifficultyCostMultiplier());
             tower.Sell();
             towers.Remove(tower);
         }

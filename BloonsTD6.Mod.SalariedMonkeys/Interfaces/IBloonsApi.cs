@@ -31,4 +31,9 @@ public interface IBloonsApi
     /// True if currently active in a round, else false.
     /// </summary>
     bool IsRoundActive();
+
+    /// <summary>
+    /// Retrieves the current multiplier of tower costs for the current difficulty.
+    /// </summary>
+    float GetDifficultyCostMultiplier();
 }

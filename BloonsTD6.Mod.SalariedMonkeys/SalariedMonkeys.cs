@@ -109,13 +109,36 @@ public class SalariedMonkeys
         if (IsPayingSalaries || !Api.IsRoundActive()) 
             return;
 
-        var cost = GetTowerInfo(tower).TotalCost;
-        Api.AddCash(-Settings.CalculateCost(cost));
+        Api.AddCash(-this.CalculateSalary(tower.towerModel));
     }
 }
 
 public static class SalariedMonkeysExtensions
 {
+    /// <summary>
+    /// Calculates the salary per round of a given tower.
+    /// </summary>
+    /// <param name="monkeys"></param>
+    /// <param name="model">The model representing the individual tower.</param>
+    public static float CalculateSalary(this SalariedMonkeys monkeys, TowerModel model)
+    {
+        var baseCost = monkeys.GetTowerInfo(model).TotalCost;
+        var multiplier = monkeys.Api.GetDifficultyCostMultiplier();
+        return monkeys.Settings.CalculateCost(baseCost, multiplier);
+    }
+
+    /// <summary>
+    /// Calculates the salary per round of a given upgrade.
+    /// </summary>
+    /// <param name="monkeys"></param>
+    /// <param name="upgrade">The model representing the individual upgrade.</param>
+    public static float CalculateSalary(this SalariedMonkeys monkeys, UpgradeModel upgrade)
+    {
+        var baseCost = monkeys.GetUpgradeCost(upgrade);
+        var multiplier = monkeys.Api.GetDifficultyCostMultiplier();
+        return monkeys.Settings.CalculateCost(baseCost, multiplier);
+    }
+
     /// <summary>
     /// Constructs the mod from the current game instance.
     /// </summary>

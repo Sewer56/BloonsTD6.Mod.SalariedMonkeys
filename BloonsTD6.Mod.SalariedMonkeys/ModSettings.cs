@@ -12,5 +12,6 @@ public class ModSettings
     /// Calculates a new cost based on the modifiers specified in this settings page.
     /// </summary>
     /// <param name="baseCost">The original cost.</param>
-    public float CalculateCost(float baseCost) => baseCost * CostPercentPerRound;
+    /// <param name="difficultyCostMultiplier">The cost multiplier for the current difficulty.</param>
+    public float CalculateCost(float baseCost, float difficultyCostMultiplier = 1.00f) => (baseCost * CostPercentPerRound) * difficultyCostMultiplier;
 }
