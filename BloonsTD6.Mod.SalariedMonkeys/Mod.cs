@@ -1,8 +1,10 @@
 ﻿using Assets.Scripts.Models;
+using Assets.Scripts.Models.Difficulty;
 using Assets.Scripts.Models.Towers;
+using Assets.Scripts.Models.Towers.Behaviors;
+using Assets.Scripts.Models.Towers.Mods;
 using Assets.Scripts.Simulation.Objects;
 using Assets.Scripts.Simulation.Towers;
-using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
@@ -142,6 +144,9 @@ public class Mod : BloonsTD6Mod
         pos.x += 100;
         loanDisplay.transform.position = pos;
     }
+
+    // Disable income in other modes.
+    public static void CreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods) => result.DisableIncome();
 
     private void ApplySettings() => SetCostPerRoundFromSlider((double)CostPercentPerRound.GetValue());
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);

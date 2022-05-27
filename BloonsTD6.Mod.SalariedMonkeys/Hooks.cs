@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Unity.UI_New.InGame.Stats;
+﻿using Assets.Scripts.Models;
+using Assets.Scripts.Models.Towers.Mods;
+using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
 using Assets.Scripts.Unity.UI_New.Upgrade;
@@ -40,6 +42,13 @@ public class LoanDisplay_Initialise
 {
     [HarmonyPostfix]
     public static void Postfix(LoanDisplay __instance) => Mod.LoanDisplay_Initialise(__instance);
+}
+
+[HarmonyPatch(typeof(GameModel), nameof(GameModel.CreateModded), typeof(GameModel), typeof(Il2CppSystem.Collections.Generic.List<ModModel>))]
+public class GameModel_CreateModded
+{
+    [HarmonyPrefix]
+    public static void DisableIncome(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods) => Mod.CreateModded(result, mods);
 }
 
 [HarmonyPatch(typeof(SelectedUpgrade), nameof(UpgradeDetails.SetUpgrade))]
