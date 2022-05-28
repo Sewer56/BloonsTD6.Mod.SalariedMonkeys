@@ -39,6 +39,11 @@ public class Mod : BloonsTD6Mod
         displayName = "Disable Income",
     };
 
+    private static readonly ModSettingEnum<SellPenaltyKind> SellPenalty = new ModSettingEnum<SellPenaltyKind>(SellPenaltyKind.FreeBetweenRounds)
+    {
+        displayName = "Selling Mode",
+    };
+
     private static SalariedMonkeys SalariedMonkeys => SalariedMonkeys.Instance;
     private static CashDisplay? _cashDisplay;
     private static ModSettings _modSettings = new ModSettings();
@@ -56,6 +61,7 @@ public class Mod : BloonsTD6Mod
         OnPreferencesLoaded();
         CostPercentPerRound.OnValueChanged.Add(SetCostPerRoundFromSlider);
         DisableIncome.OnValueChanged.Add(SetDisableIncome);
+        SellPenalty.OnValueChanged.Add(SetSellPenaltyType);
         SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings));
         ApplySettings();
     }
@@ -170,7 +176,10 @@ public class Mod : BloonsTD6Mod
     {
         SetCostPerRoundFromSlider((double)CostPercentPerRound.GetValue());
         SetDisableIncome(DisableIncome);
+        SetSellPenaltyType(SellPenalty);
     }
+
+    private void SetSellPenaltyType(SellPenaltyKind value) => _modSettings.SellPenalty = value;
 
     private void SetDisableIncome(bool value) => _modSettings.DisableIncome = value;
 

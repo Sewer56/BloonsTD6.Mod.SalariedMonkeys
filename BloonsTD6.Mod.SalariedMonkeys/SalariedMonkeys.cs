@@ -106,10 +106,12 @@ public class SalariedMonkeys
     /// <param name="tower">The tower to be sold.</param>
     public void OnSellTower(Tower tower)
     {
-        if (IsPayingSalaries || !Api.IsRoundActive()) 
+        if (IsPayingSalaries || Settings.SellPenalty == SellPenaltyKind.Free)
             return;
-
-        Api.AddCash(-this.CalculateSalary(tower.towerModel));
+        
+        if (Settings.SellPenalty == SellPenaltyKind.Always || 
+            (Settings.SellPenalty == SellPenaltyKind.FreeBetweenRounds && Api.IsRoundActive()))
+            Api.AddCash(-this.CalculateSalary(tower.towerModel));
     }
 }
 
