@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+using Assets.Scripts.Models;
 using Assets.Scripts.Models.Difficulty;
 using Assets.Scripts.Models.Towers.Behaviors;
 using Assets.Scripts.Models.Towers.Mods;
@@ -8,6 +9,7 @@ using BTD_Mod_Helper.Extensions;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 
+[ExcludeFromCodeCoverage] // Only way to test these is in-game.
 internal static class BloonsExtensions
 {
     /// <summary>

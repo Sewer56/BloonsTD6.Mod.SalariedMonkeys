@@ -1,9 +1,12 @@
-﻿namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 
 /// <summary>
 /// String formatter that caches the resultant strings.
 /// To be used until I find more efficient ways to change menu texts without spamming the GC.
 /// </summary>
+[ExcludeFromCodeCoverage] // doesn't require testing
 internal class CachedStringFormatter
 {
     private Dictionary<float, string> _floatToWithDollarDictionary = new Dictionary<float, string>();

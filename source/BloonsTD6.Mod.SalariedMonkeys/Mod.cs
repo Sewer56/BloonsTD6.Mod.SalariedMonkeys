@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+using Assets.Scripts.Models;
 using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Models.Towers.Mods;
 using Assets.Scripts.Simulation.Objects;
@@ -21,6 +22,7 @@ namespace BloonsTD6.Mod.SalariedMonkeys;
 /// This class contains all code specific to BTD6.
 /// As such, it is not testable without going ingame.
 /// </summary>
+[ExcludeFromCodeCoverage] // game specific code
 public class Mod : BloonsTD6Mod
 {
     // Github API URL used to check if this mod is up to date. For example:
