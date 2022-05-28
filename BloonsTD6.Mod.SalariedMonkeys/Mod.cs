@@ -49,12 +49,7 @@ public class Mod : BloonsTD6Mod
     private static ModSettings _modSettings = new ModSettings();
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
     private static bool _invalidateCashDisplay = false;
-
-    /*
-     * TODO: Co-Op
-     * TODO: Geraldo
-     */
-
+    
     public override void OnTitleScreen()
     {
         // Initialise Mod.

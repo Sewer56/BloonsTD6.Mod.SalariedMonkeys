@@ -11,6 +11,21 @@ Introducing Monkeys for Hire, a mod that changes Bloons such that the monkeys ar
 You can find the download for the mod in the [Releases Section on GitHub](https://github.com/Sewer56/BloonsTD6.Mod.SalariedMonkeys/releases/latest).  
 Simply extract the DLL to your `Mods` directory.  
 
+## Features List
+
+✅ indicates a feature is implemented.  
+⚠️ indicates a feature is not yet complete.  
+❌ indicates a feature is not yet implemented.
+
+- ✅ Mod Settings.  
+- ✅ Cost Scaling per Difficulty.  
+- ✅ Accurate Costs/Salary in Menus.  
+- ✅ Combine with Other Mods Cleanly.  
+- ✅ Disable Income.  
+- ❌ Setting presets (Needs mod helper update!).  
+- ❌ Co-Op (Need testing help).  
+- ❌ Geraldo (Thinking about best course of action for it).  
+
 ## Building
 
 ### First Time Setup
@@ -33,7 +48,6 @@ In order to make it so your mod gets copied to the `Mods` folder on build, you n
 
 - For most users simply double clicking `SetEnvironmentVariable.ps1` should be sufficient.
 - Alternatively, run the script manually from PowerShell `.\SetEnvironmentVariable.ps1 -Path "D:\Games\BloonsTD6"`.  
-
 
 ## Updating Game & Library Versions 
 
