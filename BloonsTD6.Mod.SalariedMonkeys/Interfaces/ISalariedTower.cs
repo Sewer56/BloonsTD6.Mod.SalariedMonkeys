@@ -14,6 +14,7 @@ public interface ISalariedTower
 
     /// <summary>
     /// Returns the total cost of the tower.
+    /// This includes discounts.
     /// </summary>
     float GetTotalCost();
 
@@ -30,6 +31,5 @@ public static class SalariedTowerExtensions
     /// </summary>
     /// <param name="tower">The tower in question.</param>
     /// <param name="settings">The settings for the mod.</param>
-    /// <param name="difficultyCostMultiplier">The cost multiplier for the current difficulty.</param>
-    public static float GetSalary(this ISalariedTower tower, ModSettings settings, float difficultyCostMultiplier = 1.00f) => settings.CalculateCost(tower.GetTotalCost(), difficultyCostMultiplier);
+    public static float GetSalary(this ISalariedTower tower, ModSettings settings) => settings.CalculateCost(tower.GetTotalCost());
 }

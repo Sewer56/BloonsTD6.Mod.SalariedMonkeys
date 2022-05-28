@@ -1,7 +1,7 @@
-﻿using Assets.Scripts.Models.Towers.Mods;
+﻿using Assets.Scripts.Simulation.SMath;
+using Assets.Scripts.Simulation.Towers.Behaviors;
 using Assets.Scripts.Unity.UI_New.InGame;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
-using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BTD_Mod_Helper.Extensions;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
@@ -9,7 +9,6 @@ namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
 internal class BloonsApi : IBloonsApi
 {
     public static readonly BloonsApi Instance = new BloonsApi();
-    private static GlobalCostModModel? _cachedGlobalCostModel;
 
     public double GetCash() => InGame.instance.GetCash();
 
@@ -42,24 +41,8 @@ internal class BloonsApi : IBloonsApi
 
     public bool IsRoundActive() => InGame.instance.UnityToSimulation.AreRoundsActive();
 
-    public float GetDifficultyCostMultiplier() => GetCachedGlobalCostModel().multiplier;
-
-    public static void ResetCacheForNewMatch() => _cachedGlobalCostModel = null;
-
-    private static GlobalCostModModel GetCachedGlobalCostModel()
+    public Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Collections.Generic.List<DiscountZone>> GetDiscountInfo(Vector3 position, int path, int tier)
     {
-        if (_cachedGlobalCostModel != null)
-            return _cachedGlobalCostModel;
-
-        var gameModel = InGame.instance.GetGameModel();
-        var model     = gameModel.GetGlobalCostModel();
-        if (model != null)
-        {
-            _cachedGlobalCostModel = model;
-            return model;
-        }
-        
-        ThrowHelpers.ThrowException("GlobalCostModModel not found");
-        return null!;
+        return InGame.instance.GetTowerManager().GetZoneDiscount(position, path, tier);
     }
 }

@@ -48,7 +48,10 @@ public class LoanDisplay_Initialise
 public class GameModel_CreateModded
 {
     [HarmonyPrefix]
-    public static void DisableIncome(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods) => Mod.CreateModded(result, mods);
+    public static void DisableIncome(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods) => Mod.OnCreateModded(result, mods);
+
+    [HarmonyPostfix]
+    public static void CreateSalariedMonkeys(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods) => Mod.AfterCreateModded(result, mods);
 }
 
 [HarmonyPatch(typeof(SelectedUpgrade), nameof(UpgradeDetails.SetUpgrade))]

@@ -1,4 +1,6 @@
-﻿using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
+﻿using Assets.Scripts.Simulation.Towers.Behaviors;
+using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
+using Vector3 = Assets.Scripts.Simulation.SMath.Vector3;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Tests.Mocks;
 
@@ -9,7 +11,6 @@ internal class FakeBloonsApi : IBloonsApi
     public bool AllowSelling;
     public int TowersSold;
     public bool IsRoundActiveValue;
-    public float DifficultyCostMultiplier = 1.00f;
 
     public FakeBloonsApi(double cash, List<ISalariedTower> towers)
     {
@@ -31,5 +32,9 @@ internal class FakeBloonsApi : IBloonsApi
     }
 
     public bool IsRoundActive() => IsRoundActiveValue;
-    public float GetDifficultyCostMultiplier() => DifficultyCostMultiplier;
+
+    public Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Collections.Generic.List<DiscountZone>> GetDiscountInfo(Vector3 position, int path, int tier)
+    {
+        return new Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Collections.Generic.List<DiscountZone>>();
+    }
 }

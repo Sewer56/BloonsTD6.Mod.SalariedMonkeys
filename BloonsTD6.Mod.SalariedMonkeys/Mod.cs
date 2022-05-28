@@ -2,7 +2,10 @@
 using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Models.Towers.Mods;
 using Assets.Scripts.Simulation.Objects;
+using Assets.Scripts.Simulation.SMath;
 using Assets.Scripts.Simulation.Towers;
+using Assets.Scripts.Unity;
+using Assets.Scripts.Unity.UI_New.InGame;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
@@ -10,6 +13,7 @@ using Assets.Scripts.Unity.UI_New.Upgrade;
 using BloonsTD6.Mod.SalariedMonkeys.Implementation;
 using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BTD_Mod_Helper.Api.ModOptions;
+using BTD_Mod_Helper.Extensions;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 [assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
@@ -48,6 +52,7 @@ public class Mod : BloonsTD6Mod
     private static CashDisplay? _cashDisplay;
     private static ModSettings _modSettings = new ModSettings();
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
+    private static bool _invalidateCashDisplay = false;
 
     /*
      * TODO: Co-Op
@@ -62,7 +67,6 @@ public class Mod : BloonsTD6Mod
         CostPercentPerRound.OnValueChanged.Add(SetCostPerRoundFromSlider);
         DisableIncome.OnValueChanged.Add(SetDisableIncome);
         SellPenalty.OnValueChanged.Add(SetSellPenaltyType);
-        SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings));
         ApplySettings();
     }
 
@@ -72,7 +76,7 @@ public class Mod : BloonsTD6Mod
 
 #if DEBUG
         var towers = SalariedMonkeys.Api.GetTowers();
-        var totalCost = towers.Sum(x => x.GetTotalCost()) * SalariedMonkeys.Api.GetDifficultyCostMultiplier();
+        var totalCost = towers.Sum(x => x.GetTotalCost());
         MelonLogger.Msg($"Total Tower Cost: {totalCost}");
 #endif
     }
@@ -82,20 +86,37 @@ public class Mod : BloonsTD6Mod
         // TODO: This is a hack! Find a better way to do this.
         _cashDisplay = null;
         _cachedStringFormatter.Clear();
-        BloonsApi.ResetCacheForNewMatch();
+        SalariedMonkeys.DeInitialize();
         GC.Collect();
     }
 
     // Hooks for updating cash display.
-    public override void OnTowerCreated(Tower tower, Entity target, Model modelToUse) => _cashDisplay?.OnCashChanged();
+    public override void OnTowerCreated(Tower tower, Entity target, Model modelToUse) => _invalidateCashDisplay = true;
 
-    public override void OnTowerUpgraded(Tower tower, string upgradeName, TowerModel newBaseTowerModel) => _cashDisplay?.OnCashChanged();
+    public override void OnTowerUpgraded(Tower tower, string upgradeName, TowerModel newBaseTowerModel) => _invalidateCashDisplay = true;
 
     public override void OnTowerDestroyed(Tower tower)
     {
         // Make the user pay for the tower for the round if selling before round end.
         SalariedMonkeys.OnSellTower(tower);
+        _invalidateCashDisplay = true;
+    }
+
+    // Executed every frame.
+    public override void OnUpdate()
+    {
+        /*
+            Limit updates of certain UI elements to 1 per frame.
+
+            This is also a questionable bugfix to salary display in cash counter 
+            not updating correctly when buying an upgrade that applies a discount.
+        */
+
+        if (!_invalidateCashDisplay)
+            return;
+
         _cashDisplay?.OnCashChanged();
+        _invalidateCashDisplay = false;
     }
 
     // Cash display on top of screen
@@ -132,7 +153,7 @@ public class Mod : BloonsTD6Mod
         if (upgrade == null)
             return;
 
-        var upgradeCost = SalariedMonkeys.CalculateSalary(upgrade);
+        var upgradeCost = SalariedMonkeys.CalculateSalaryWithDiscount(upgrade, instance.tts.tower);
         instance.Cost.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
         if (SalariedMonkeys.Api.GetCash() < upgradeCost)
             instance.upgradeStatus = UpgradeButton.UpgradeStatus.CanNotAfford;
@@ -148,17 +169,21 @@ public class Mod : BloonsTD6Mod
         if (tower == null)
             return;
 
-        var upgradeCost = SalariedMonkeys.CalculateSalary(tower.towerModel);
+        var upgradeCost = SalariedMonkeys.CalculateSalaryWithDiscount(tower);
         instance.sellText.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
     }
 
-    // Upgrade menu.
+    // Upgrade menu. Can be accessed from main menu.
     public static void AfterUpgradeDetails_UpdateSelected(SelectedUpgrade selectedUpgrade)
     {
+        // Don't allow access from main menu. This class is only inited in game.
+        if (!SalariedMonkeys.IsInitialized)
+            return;
+
         var upgradeDetails = selectedUpgrade.selectedDetails;
         if (upgradeDetails == null || upgradeDetails.upgrade == null)
             return;
-
+        
         var upgradeCost = SalariedMonkeys.CalculateSalary(upgradeDetails.upgrade);
         selectedUpgrade.unlockCost.text = _cachedStringFormatter.GetUpgradeCost(upgradeCost);
     }
@@ -172,13 +197,19 @@ public class Mod : BloonsTD6Mod
     }
 
     // Disable income in other modes.
-    public static void CreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods)
+    public static void OnCreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods)
     {
         if (!_modSettings.DisableIncome)
             return;
 
         result.DisableIncome();
         result.RemoveTower(TowerType.BananaFarm);
+    }
+
+    // Initialize GameMode
+    public static void AfterCreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods)
+    {
+        SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings), result);
     }
 
     // Applying Settings Menu Settings.

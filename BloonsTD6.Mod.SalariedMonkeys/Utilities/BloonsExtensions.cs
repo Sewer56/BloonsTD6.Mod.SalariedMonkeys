@@ -2,6 +2,8 @@
 using Assets.Scripts.Models.Difficulty;
 using Assets.Scripts.Models.Towers.Behaviors;
 using Assets.Scripts.Models.Towers.Mods;
+using Assets.Scripts.Simulation.SMath;
+using Assets.Scripts.Simulation.Towers.Behaviors;
 using Assets.Scripts.Unity.UI_New.InGame.RightMenu;
 using BTD_Mod_Helper.Extensions;
 
@@ -97,5 +99,26 @@ internal static class BloonsExtensions
     public static void RemoveTower(this GameModel model, string towerId)
     {
         model.towerSet = model.towerSet.Where(x => x.towerId != towerId).ToIl2CppReferenceArray();
+    }
+
+    /// <summary>
+    /// Converts a boxed vector to our own.
+    /// Re-implemented in managed code to save performance.
+    /// </summary>
+    public static Vector3 ToVector3(this Vector3Boxed boxed) => new(boxed.X, boxed.Y, boxed.Z);
+
+    /// <summary>
+    /// Returns the total discount multiplier for a set of discount zones.
+    /// </summary>
+    /// <param name="zones">The discount zones in question.</param>
+    public static float CalcTotalDiscountMultiplier(this Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Collections.Generic.List<DiscountZone>> zones)
+    {
+        var totalDiscount = 1.0f;
+
+        foreach (var discount in zones)
+        foreach (var value in discount.Value)
+            totalDiscount -= value.discountZoneModel.discountMultiplier;
+
+        return totalDiscount;
     }
 }

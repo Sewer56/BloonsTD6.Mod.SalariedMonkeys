@@ -1,9 +1,12 @@
-﻿using Assets.Scripts.Models.Towers;
+﻿using Assets.Scripts.Models;
+using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Models.Towers.Upgrades;
 using Assets.Scripts.Simulation.Towers;
+using Assets.Scripts.Simulation.Towers.Behaviors;
 using Assets.Scripts.Unity;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 using BloonsTD6.Mod.SalariedMonkeys.Structures;
+using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BTD_Mod_Helper.Extensions;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
@@ -25,6 +28,11 @@ public class SalariedMonkeys
     /// </summary>
     public bool IsPayingSalaries { get; private set; } = false;
 
+    /// <summary>
+    /// True if this class is initialized, else false.
+    /// </summary>
+    public bool IsInitialized { get; private set; } = false;
+
     public ModSettings Settings => TowerManager.Settings;
     public IBloonsApi Api => TowerManager.BloonsApi;
 
@@ -42,7 +50,13 @@ public class SalariedMonkeys
         TowerManager  = towerManager;
         _upgradeToCost = upgradeToCost;
         _towerToCost   = towerToCost;
+        IsInitialized = true;
     }
+
+    /// <summary>
+    /// Marks the instance as uninitialized.
+    /// </summary>
+    public void DeInitialize() => IsInitialized = false;
 
     /// <summary>
     /// Gets the upgrade info for a given tower.
@@ -64,9 +78,10 @@ public class SalariedMonkeys
 
     /// <summary>
     /// Gets the upgrade cost for a given upgrade.
+    /// Does not include discounts.
     /// </summary>
     /// <param name="upgrade">The upgrade in question.</param>
-    public float GetUpgradeCost(UpgradeModel upgrade)
+    public float GetRawUpgradeCost(UpgradeModel upgrade)
     {
         if (_upgradeToCost.TryGetValue(upgrade.name, out var value))
             return value;
@@ -111,7 +126,7 @@ public class SalariedMonkeys
         
         if (Settings.SellPenalty == SellPenaltyKind.Always || 
             (Settings.SellPenalty == SellPenaltyKind.FreeBetweenRounds && Api.IsRoundActive()))
-            Api.AddCash(-this.CalculateSalary(tower.towerModel));
+            Api.AddCash(-this.CalculateSalaryWithDiscount(tower));
     }
 }
 
@@ -125,8 +140,20 @@ public static class SalariedMonkeysExtensions
     public static float CalculateSalary(this SalariedMonkeys monkeys, TowerModel model)
     {
         var baseCost = monkeys.GetTowerInfo(model).TotalCost;
-        var multiplier = monkeys.Api.GetDifficultyCostMultiplier();
-        return monkeys.Settings.CalculateCost(baseCost, multiplier);
+        return monkeys.Settings.CalculateCost(baseCost);
+    }
+
+    /// <summary>
+    /// Calculates the salary per round of a given tower.
+    /// </summary>
+    /// <param name="monkeys"></param>
+    /// <param name="model">The model representing the individual tower.</param>
+    public static float CalculateSalaryWithDiscount(this SalariedMonkeys monkeys, Tower model)
+    {
+        var baseCost = monkeys.GetTowerInfo(model)
+                              .CalculateCostWithDiscounts(monkeys.Api, model);
+
+        return monkeys.Settings.CalculateCost(baseCost);
     }
 
     /// <summary>
@@ -136,9 +163,22 @@ public static class SalariedMonkeysExtensions
     /// <param name="upgrade">The model representing the individual upgrade.</param>
     public static float CalculateSalary(this SalariedMonkeys monkeys, UpgradeModel upgrade)
     {
-        var baseCost = monkeys.GetUpgradeCost(upgrade);
-        var multiplier = monkeys.Api.GetDifficultyCostMultiplier();
-        return monkeys.Settings.CalculateCost(baseCost, multiplier);
+        var baseCost = monkeys.GetRawUpgradeCost(upgrade);
+        return monkeys.Settings.CalculateCost(baseCost);
+    }
+
+    /// <summary>
+    /// Calculates the salary per round of a given upgrade.
+    /// Includes discount if possible.
+    /// </summary>
+    /// <param name="monkeys"></param>
+    /// <param name="upgrade">The model representing the individual upgrade.</param>
+    /// <param name="tower">The tower for which to calculate the discounts.</param>
+    public static float CalculateSalaryWithDiscount(this SalariedMonkeys monkeys, UpgradeModel upgrade, Tower tower)
+    {
+        var baseSalary = monkeys.CalculateSalary(upgrade);
+        var discounts = monkeys.Api.GetDiscountInfo(BloonsExtensions.ToVector3(tower.Position), upgrade.path, upgrade.tier);
+        return baseSalary * discounts.CalcTotalDiscountMultiplier();
     }
 
     /// <summary>
@@ -146,9 +186,9 @@ public static class SalariedMonkeysExtensions
     /// </summary>
     /// <param name="monkeys"></param>
     /// <param name="towerManager">The tower manager to use for the class.</param>
-    public static void ConstructInGame(this SalariedMonkeys monkeys, ITowerManager towerManager)
+    /// <param name="model">The model to use for the current game.</param>
+    public static void ConstructInGame(this SalariedMonkeys monkeys, ITowerManager towerManager, GameModel model)
     {
-        var model = Game.instance.model;
         var towerToCost = new Dictionary<string, TowerInfo>();
         var upgradeToCost = new Dictionary<string, float>();
 
@@ -158,17 +198,22 @@ public static class SalariedMonkeysExtensions
             var id = tower.GetTowerId();
             var towerCost = tower.cost;
             var upgradeCost = 0.0f;
+            var upgrades = new UpgradeModel[tower.appliedUpgrades.Count];
 
-            foreach (var upgrade in tower.appliedUpgrades)
+            for (var x = 0; x < tower.appliedUpgrades.Count; x++)
             {
+                var upgrade = tower.appliedUpgrades[x];
                 var upgradeModel = Game.instance.model.GetUpgrade(upgrade);
+
+                upgrades[x] = upgradeModel;
                 upgradeCost += upgradeModel.cost;
             }
 
             towerToCost[id] = new TowerInfo()
             {
                 TowerCost = towerCost,
-                UpgradeCost = upgradeCost
+                UpgradeCost = upgradeCost,
+                Upgrades = upgrades
             };
 
             tower.cost = 0;

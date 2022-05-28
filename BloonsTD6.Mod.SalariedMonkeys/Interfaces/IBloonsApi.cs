@@ -1,4 +1,7 @@
-﻿namespace BloonsTD6.Mod.SalariedMonkeys.Interfaces;
+﻿using Assets.Scripts.Simulation.SMath;
+using Assets.Scripts.Simulation.Towers.Behaviors;
+
+namespace BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 
 /// <summary>
 /// Abstracts a set of common game utility functions.
@@ -33,7 +36,11 @@ public interface IBloonsApi
     bool IsRoundActive();
 
     /// <summary>
-    /// Retrieves the current multiplier of tower costs for the current difficulty.
+    /// Retrieves the info of all the discounts applicable to a given position on the map.
     /// </summary>
-    float GetDifficultyCostMultiplier();
+    /// <param name="position">Position of the tower.</param>
+    /// <param name="path">Path the tower lies on.</param>
+    /// <param name="tier">The tier of the tower.</param>
+    /// <returns></returns>
+    Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Collections.Generic.List<DiscountZone>> GetDiscountInfo(Vector3 position, int path, int tier);
 }
