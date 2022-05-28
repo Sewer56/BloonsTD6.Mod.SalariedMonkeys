@@ -4,25 +4,12 @@ using Assets.Scripts.Models.Towers.Behaviors;
 using Assets.Scripts.Models.Towers.Mods;
 using Assets.Scripts.Simulation.SMath;
 using Assets.Scripts.Simulation.Towers.Behaviors;
-using Assets.Scripts.Unity.UI_New.InGame.RightMenu;
 using BTD_Mod_Helper.Extensions;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 
 internal static class BloonsExtensions
 {
-    /// <summary>
-    /// Obtains the global cost model for the current difficulty.
-    /// </summary>
-    /// <param name="model">Access to the game instance.</param>
-    public static GlobalCostModModel? GetGlobalCostModel(this GameModel model)
-    {
-        var difficultyName = model.difficultyId;
-        var modModel = model.GetModModel(difficultyName);
-        var costModel = modModel?.GetChild<GlobalCostModModel>();
-        return costModel;
-    }
-
     /// <summary>
     /// Gets all descendants and clones them, returning a mapping from old value to new value.
     /// </summary>
@@ -72,22 +59,6 @@ internal static class BloonsExtensions
             modelPair.Key.marketplaceLives = modelPair.Value.marketplaceLives;
             modelPair.Key.displayLifespan = modelPair.Value.displayLifespan;
             modelPair.Key.displayPath = modelPair.Value.displayPath;
-        }
-    }
-
-    /// <summary>
-    /// Removes the banana farm from the shop.
-    /// After calling this, consider calling shop.TowerSetChanged(true);
-    /// </summary>
-    /// <param name="shop">The shop to remove item from.</param>
-    /// <param name="towerId">ID of the tower to remove from shop.</param>
-    public static void RemoveTowerButton(this ShopMenu shop, string towerId)
-    {
-        for (int x = shop.ActiveTowerButtons.Count - 1; x >= 0; x--)
-        {
-            var item = shop.activeTowerButtons[x];
-            if (item.towerModel.baseId == towerId)
-                shop.ActiveTowerButtons.Remove(item);
         }
     }
 
