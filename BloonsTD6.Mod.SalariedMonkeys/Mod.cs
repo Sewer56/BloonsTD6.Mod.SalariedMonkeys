@@ -66,7 +66,16 @@ public class Mod : BloonsTD6Mod
         ApplySettings();
     }
 
-    public override void OnRoundEnd() => SalariedMonkeys.PaySalaries();
+    public override void OnRoundEnd()
+    {
+        SalariedMonkeys.PaySalaries();
+
+#if DEBUG
+        var towers = SalariedMonkeys.Api.GetTowers();
+        var totalCost = towers.Sum(x => x.GetTotalCost()) * SalariedMonkeys.Api.GetDifficultyCostMultiplier();
+        MelonLogger.Msg($"Total Tower Cost: {totalCost}");
+#endif
+    }
 
     public override void OnMatchEnd()
     {
