@@ -1,7 +1,5 @@
 ﻿using Assets.Scripts.Models;
-using Assets.Scripts.Models.Difficulty;
 using Assets.Scripts.Models.Towers;
-using Assets.Scripts.Models.Towers.Behaviors;
 using Assets.Scripts.Models.Towers.Mods;
 using Assets.Scripts.Simulation.Objects;
 using Assets.Scripts.Simulation.Towers;
@@ -49,7 +47,7 @@ public class Mod : BloonsTD6Mod
         SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings));
         ApplySettings();
     }
-
+    
     public override void OnRoundEnd() => SalariedMonkeys.PaySalaries();
 
     public override void OnMatchEnd()
@@ -146,8 +144,14 @@ public class Mod : BloonsTD6Mod
     }
 
     // Disable income in other modes.
-    public static void CreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods) => result.DisableIncome();
+    public static void CreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods)
+    {
+        result.DisableIncome();
+        result.RemoveTower(TowerType.BananaFarm);
+    }
 
+    // When the set of towers for menu changes.
     private void ApplySettings() => SetCostPerRoundFromSlider((double)CostPercentPerRound.GetValue());
+
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);
 }

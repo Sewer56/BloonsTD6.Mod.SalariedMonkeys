@@ -2,6 +2,7 @@
 using Assets.Scripts.Models.Difficulty;
 using Assets.Scripts.Models.Towers.Behaviors;
 using Assets.Scripts.Models.Towers.Mods;
+using Assets.Scripts.Unity.UI_New.InGame.RightMenu;
 using BTD_Mod_Helper.Extensions;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
@@ -70,5 +71,31 @@ internal static class BloonsExtensions
             modelPair.Key.displayLifespan = modelPair.Value.displayLifespan;
             modelPair.Key.displayPath = modelPair.Value.displayPath;
         }
+    }
+
+    /// <summary>
+    /// Removes the banana farm from the shop.
+    /// After calling this, consider calling shop.TowerSetChanged(true);
+    /// </summary>
+    /// <param name="shop">The shop to remove item from.</param>
+    /// <param name="towerId">ID of the tower to remove from shop.</param>
+    public static void RemoveTowerButton(this ShopMenu shop, string towerId)
+    {
+        for (int x = shop.ActiveTowerButtons.Count - 1; x >= 0; x--)
+        {
+            var item = shop.activeTowerButtons[x];
+            if (item.towerModel.baseId == towerId)
+                shop.ActiveTowerButtons.Remove(item);
+        }
+    }
+
+    /// <summary>
+    /// Removes a tower from a list of all towers in the GameModel.
+    /// </summary>
+    /// <param name="model">The model to remove the ID from.</param>
+    /// <param name="towerId">Unique ID of the tower.</param>
+    public static void RemoveTower(this GameModel model, string towerId)
+    {
+        model.towerSet = model.towerSet.Where(x => x.towerId != towerId).ToIl2CppReferenceArray();
     }
 }
