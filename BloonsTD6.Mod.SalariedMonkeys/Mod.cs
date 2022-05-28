@@ -39,6 +39,12 @@ public class Mod : BloonsTD6Mod
     private static ModSettings _modSettings = new ModSettings();
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
 
+    /*
+     * TODO: Co-Op
+     * TODO: Geraldo
+     * TODO: Tower Discounts / Discount Villages
+     */
+
     public override void OnTitleScreen()
     {
         // Initialise Mod.
