@@ -28,6 +28,8 @@ Simply extract the DLL to your `Mods` directory.
 
 ## Building
 
+All source code is contained inside the `source` folder.  
+
 ### First Time Setup
 
 - Install [.NET 6.0 SDK or newer](https://dotnet.microsoft.com/en-us/download).  
