@@ -34,6 +34,11 @@ public class Mod : BloonsTD6Mod
         isSlider = true
     };
 
+    private static readonly ModSettingBool DisableIncome = new ModSettingBool(true)
+    {
+        displayName = "Disable Income",
+    };
+
     private static SalariedMonkeys SalariedMonkeys => SalariedMonkeys.Instance;
     private static CashDisplay? _cashDisplay;
     private static ModSettings _modSettings = new ModSettings();
@@ -50,10 +55,11 @@ public class Mod : BloonsTD6Mod
         // Initialise Mod.
         OnPreferencesLoaded();
         CostPercentPerRound.OnValueChanged.Add(SetCostPerRoundFromSlider);
+        DisableIncome.OnValueChanged.Add(SetDisableIncome);
         SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings));
         ApplySettings();
     }
-    
+
     public override void OnRoundEnd() => SalariedMonkeys.PaySalaries();
 
     public override void OnMatchEnd()
@@ -152,12 +158,21 @@ public class Mod : BloonsTD6Mod
     // Disable income in other modes.
     public static void CreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods)
     {
+        if (!_modSettings.DisableIncome)
+            return;
+
         result.DisableIncome();
         result.RemoveTower(TowerType.BananaFarm);
     }
 
-    // When the set of towers for menu changes.
-    private void ApplySettings() => SetCostPerRoundFromSlider((double)CostPercentPerRound.GetValue());
+    // Applying Settings Menu Settings.
+    private void ApplySettings()
+    {
+        SetCostPerRoundFromSlider((double)CostPercentPerRound.GetValue());
+        SetDisableIncome(DisableIncome);
+    }
+
+    private void SetDisableIncome(bool value) => _modSettings.DisableIncome = value;
 
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);
 }
