@@ -57,5 +57,5 @@ Write-Output "Base Path: $path"
 Write-Output "Out Folder Path: $outFolder"
 
 foreach ($assemblyPath in $paths) {
-    MakeReferenceAssembly -Path $assemblyPath -OutFolder $outFolder
+    CopyAssembly -Path $assemblyPath -OutFolder $outFolder
 }
