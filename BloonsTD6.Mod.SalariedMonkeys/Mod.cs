@@ -74,6 +74,7 @@ public class Mod : BloonsTD6Mod
         _cashDisplay = null;
         _cachedStringFormatter.Clear();
         BloonsApi.ResetCacheForNewMatch();
+        GC.Collect();
     }
 
     // Hooks for updating cash display.
