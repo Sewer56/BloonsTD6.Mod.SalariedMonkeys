@@ -165,6 +165,12 @@ public class Mod : BloonsTD6Mod
             return;
 
         var upgradeCost = SalariedMonkeys.CalculateSalaryWithDiscount(tower);
+
+        // Geraldo item hotfix until I decide if to give him special treatment or not.
+        // Unknown items have a cost of 0.
+        if (upgradeCost == 0)
+            return;
+
         instance.sellText.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
     }
 
