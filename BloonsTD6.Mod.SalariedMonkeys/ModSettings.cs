@@ -1,6 +1,4 @@
-﻿using BTD_Mod_Helper.Api.ModOptions;
-
-namespace BloonsTD6.Mod.SalariedMonkeys;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys;
 
 public class ModSettings
 {

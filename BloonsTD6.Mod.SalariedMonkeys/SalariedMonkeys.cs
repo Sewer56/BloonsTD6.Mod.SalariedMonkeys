@@ -2,7 +2,6 @@
 using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Models.Towers.Upgrades;
 using Assets.Scripts.Simulation.Towers;
-using Assets.Scripts.Simulation.Towers.Behaviors;
 using Assets.Scripts.Unity;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 using BloonsTD6.Mod.SalariedMonkeys.Structures;
