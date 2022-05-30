@@ -4,6 +4,7 @@ using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Models.Towers.Mods;
 using Assets.Scripts.Simulation.Objects;
 using Assets.Scripts.Simulation.Towers;
+using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
@@ -11,6 +12,12 @@ using Assets.Scripts.Unity.UI_New.Upgrade;
 using BloonsTD6.Mod.SalariedMonkeys.Implementation;
 using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BTD_Mod_Helper.Api.ModOptions;
+using BTD_Mod_Helper.Extensions;
+using Il2CppNewtonsoft.Json;
+using NinjaKiwi.LiNK;
+using NinjaKiwi.Players;
+using NinjaKiwi.Players.Files;
+using UnhollowerBaseLib;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 [assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
@@ -51,7 +58,34 @@ public class Mod : BloonsTD6Mod
     private static ModSettings _modSettings = new ModSettings();
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
     private static bool _invalidateCashDisplay = false;
-    
+
+
+    private static NativeHook<Hooks.FileStorage_LoadFn> _filestorageLoadHook;
+
+    private static IntPtr LoadFromFileStorageImpl(IntPtr path, IntPtr passwordgenerator, IntPtr jsonsettings, IntPtr savestrategy, IntPtr ignoreifnotreadable, IntPtr method)
+    {
+        MelonLogger.Msg(IL2CPP.Il2CppStringToManaged(path));
+        var result = _filestorageLoadHook.OriginalFunction(path, passwordgenerator, jsonsettings, savestrategy, ignoreifnotreadable, method);
+        MelonLogger.Msg("After Call Original!");
+        return result;
+    }
+
+    public override void OnApplicationStart()
+    {
+        _filestorageLoadHook = Hooks.LoadFromFileStorage.Hook(LoadFromFileStorageImpl).Activate();
+
+        File<Identity> id = (File<Identity>)Hooks.LoadFromFileStorage.OriginalMethod.Invoke(null, new object[]
+        {
+            @"D:\Games\Steam\steamapps\common\BloonsTD6\balls",
+            new PasswordGenerator(new Il2CppReferenceArray<Il2CppSystem.Func<string>>(1)),
+            new JsonSerializerSettings(),
+            SaveStrategy.Basic,
+            true
+        });
+
+        MelonLogger.Msg($"Test Function Call Result: {id.Path}");
+    }
+
     public override void OnTitleScreen()
     {
         // Initialise Mod.
@@ -60,6 +94,11 @@ public class Mod : BloonsTD6Mod
         DisableIncome.OnValueChanged.Add(SetDisableIncome);
         SellPenalty.OnValueChanged.Add(SetSellPenaltyType);
         ApplySettings();
+    }
+    public override void OnMainMenu()
+    {
+        var link = Game.instance.GetPlayerLiNKAccount();
+        MelonLogger.Msg(link.ID);
     }
 
     public override void OnRoundEnd()
