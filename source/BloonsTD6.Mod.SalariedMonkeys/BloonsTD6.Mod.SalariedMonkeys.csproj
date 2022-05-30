@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -45,6 +46,13 @@
     <Reference Include="Harmony">
       <HintPath>..\Dependencies\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="NinjaKiwi.LiNK">
+      <HintPath>..\Dependencies\NinjaKiwi.LiNK.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppNewtonsoft.Json.dll">
+      <HintPath>..\Dependencies\Il2CppNewtonsoft.Json.dll</HintPath>
+    </Reference>
+
     <Reference Include="System.Net.Http" />
   </ItemGroup>
 

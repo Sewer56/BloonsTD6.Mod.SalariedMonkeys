@@ -4,6 +4,7 @@ using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Models.Towers.Mods;
 using Assets.Scripts.Simulation.Objects;
 using Assets.Scripts.Simulation.Towers;
+using Assets.Scripts.Unity;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
@@ -11,6 +12,13 @@ using Assets.Scripts.Unity.UI_New.Upgrade;
 using BloonsTD6.Mod.SalariedMonkeys.Implementation;
 using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BTD_Mod_Helper.Api.ModOptions;
+using BTD_Mod_Helper.Extensions;
+using Il2CppNewtonsoft.Json;
+using NinjaKiwi.LiNK;
+using NinjaKiwi.Players;
+using NinjaKiwi.Players.Files;
+using UnhollowerBaseLib;
+using String = Il2CppSystem.String;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 [assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
@@ -51,7 +59,13 @@ public class Mod : BloonsTD6Mod
     private static ModSettings _modSettings = new ModSettings();
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
     private static bool _invalidateCashDisplay = false;
+
     
+    public override void OnApplicationStart()
+    {
+        ProfileSwitcher.Initialize();
+    }
+
     public override void OnTitleScreen()
     {
         // Initialise Mod.
