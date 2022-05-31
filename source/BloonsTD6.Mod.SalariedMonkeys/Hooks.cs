@@ -1,6 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 using Assets.Scripts.Models;
 using Assets.Scripts.Models.Towers.Mods;
+using Assets.Scripts.Simulation;
+using Assets.Scripts.Simulation.SimulationBehaviors;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
@@ -68,4 +70,11 @@ public class SelectedUpgrade_SetUpgrade
 {
     [HarmonyPostfix]
     public static void Postfix(SelectedUpgrade __instance) => Mod.AfterUpgradeDetails_UpdateSelected(__instance);
+}
+
+[HarmonyPatch(typeof(BonusCashPerRound), nameof(BonusCashPerRound.OnRoundEnd))]
+public class Simulation_RoundEnd
+{
+    [HarmonyPostfix]
+    public static void Postfix() => Mod.AfterAddEndOfRoundCash();
 }

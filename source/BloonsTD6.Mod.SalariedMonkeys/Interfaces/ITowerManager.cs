@@ -19,18 +19,19 @@ public interface ITowerManager
     /// Returns the amount of available salary.
     /// </summary>
     /// <returns></returns>
-    double GetAvailableSalary(out double totalSalary);
+    double GetAvailableSalary(int playerIndex, out double totalSalary);
 
     /// <summary>
     /// Returns the amount of payable money to the monkeys.
     /// </summary>
-    double GetTotalSalary();
+    double GetTotalSalary(int playerIndex);
 
     /// <summary>
     /// Sells all towers, starting from cheapest tower until salary demand is met.
     /// </summary>
+    /// <param name="playerIndex">The index for which to sell towers for.</param>
     /// <param name="requiredSalary">The required amount of money to be made.</param>
     /// <remarks>To be used in co-op!</remarks>
     /// <returns>Amount of new payable salary gained.</returns>
-    double SellTowers(float requiredSalary);
+    double SellTowers(int playerIndex, float requiredSalary);
 }

@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Simulation.SMath;
+using Assets.Scripts.Simulation.Towers;
 using Assets.Scripts.Simulation.Towers.Behaviors;
+using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 
@@ -9,20 +11,29 @@ namespace BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 public interface IBloonsApi
 {
     /// <summary>
+    /// Gets the zero based player index used for co-op.
+    /// Can also be used for single player APIs.
+    /// </summary>
+    int GetPlayerIndex();
+
+    /// <summary>
     /// Returns the amount of money available.
     /// </summary>
-    double GetCash();
+    /// <param name="playerIndex">Index of the player to get cash from.</param>
+    double GetCash(int playerIndex);
 
     /// <summary>
     /// Adds an amount of cash to the game.
     /// </summary>
     /// <param name="amount">The amount of cash to add.</param>
-    void AddCash(double amount);
+    /// <param name="playerIndex">Index of the player to add/remove cash to/from.</param>
+    void AddCash(double amount, int playerIndex);
 
     /// <summary>
-    /// Returns a list of currently placed towers.
+    /// Returns a list of currently placed towers for a given player.
     /// </summary>
-    List<ISalariedTower> GetTowers();
+    /// <param name="playerIndex">Index of the player to get towers for.</param>
+    List<ISalariedTower> GetTowers(int playerIndex);
 
     /// <summary>
     /// Toggles whether selling is enabled or not.
@@ -43,4 +54,20 @@ public interface IBloonsApi
     /// <param name="tier">The tier of the tower.</param>
     /// <returns></returns>
     Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Collections.Generic.List<DiscountZone>> GetDiscountInfo(Vector3 position, int path, int tier);
+}
+
+public static class IBloonsApiExtensions
+{
+    /// <summary>
+    /// Returns true if a given player owns a tower.
+    /// </summary>
+    public static bool PlayerOwnsTower(this IBloonsApi api, Tower tower, int zeroBasedIndex) => tower.GetOwnerZeroBased() == zeroBasedIndex;
+
+    /// <summary>
+    /// Returns true if the current player owns a tower.
+    /// </summary>
+    public static bool PlayerOwnsTower(this IBloonsApi api, Tower tower)
+    {
+        return api.PlayerOwnsTower(tower, api.GetPlayerIndex());
+    }
 }

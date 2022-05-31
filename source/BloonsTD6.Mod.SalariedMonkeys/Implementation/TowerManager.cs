@@ -17,16 +17,16 @@ public class TowerManager : ITowerManager
     }
 
     /// <inheritdoc/>
-    public double GetAvailableSalary(out double totalSalary)
+    public double GetAvailableSalary(int playerIndex, out double totalSalary)
     {
-        totalSalary = GetTotalSalary();
-        return BloonsApi.GetCash() - totalSalary;
+        totalSalary = GetTotalSalary(playerIndex);
+        return BloonsApi.GetCash(playerIndex) - totalSalary;
     }
 
     /// <inheritdoc/>
-    public double GetTotalSalary()
+    public double GetTotalSalary(int playerIndex)
     {
-        var towers = BloonsApi.GetTowers();
+        var towers = BloonsApi.GetTowers(playerIndex);
         var totalSalary = 0.0;
         
         foreach (var tower in towers)
@@ -35,12 +35,11 @@ public class TowerManager : ITowerManager
         return totalSalary;
     }
 
-
     /// <inheritdoc/>
-    public double SellTowers(float requiredSalary)
+    public double SellTowers(int playerIndex, float requiredSalary)
     {
         // Get towers in ascending order.
-        var towers = BloonsApi.GetTowers();
+        var towers = BloonsApi.GetTowers(playerIndex);
         towers.Sort((a, b) => a.GetTotalCost().CompareTo(b.GetTotalCost()));
 
         // Current amount of cash gained.

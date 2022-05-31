@@ -25,7 +25,7 @@ public class SalariedMonkeys
     /// <summary>
     /// This is set to true when salaries are currently being paid.
     /// </summary>
-    public bool IsPayingSalaries { get; private set; } = false;
+    public bool ForceFreeSelling { get; private set; } = false;
 
     /// <summary>
     /// True if this class is initialized, else false.
@@ -92,23 +92,27 @@ public class SalariedMonkeys
     /// Pays the salaries to all the monkeys.
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
-    public void PaySalaries()
+    public void PaySalaries(int playerIndex) => Api.AddCash(-TowerManager.GetTotalSalary(playerIndex), playerIndex);
+
+    /// <summary>
+    /// Sells towers if the player is in the negative.
+    /// </summary>
+    public void SellTowers(int playerIndex)
     {
         // Enable selling temporarily if necessary.
-        IsPayingSalaries = true;
-        var originalSellState = Api.ToggleSelling(true);
+        ForceFreeSelling = true;
+        bool? originalSellState = null;
 
         try
         {
-            var available = TowerManager.GetAvailableSalary(out double totalSalary);
+            originalSellState = Api.ToggleSelling(true);
+            var available = TowerManager.GetAvailableSalary(playerIndex, out double totalSalary);
             if (available < 0)
-                TowerManager.SellTowers((float)Math.Abs(available));
-
-            Api.AddCash(-totalSalary);
+                TowerManager.SellTowers(playerIndex, (float)Math.Abs(available));
         }
         finally
         {
-            IsPayingSalaries = false;
+            ForceFreeSelling = false;
             if (originalSellState.HasValue)
                 Api.ToggleSelling(originalSellState.Value);
         }
@@ -120,12 +124,14 @@ public class SalariedMonkeys
     /// <param name="tower">The tower to be sold.</param>
     public void OnSellTower(Tower tower)
     {
-        if (IsPayingSalaries || Settings.SellPenalty == SellPenaltyKind.Free)
+        if (ForceFreeSelling || Settings.SellPenalty == SellPenaltyKind.Free)
             return;
-        
-        if (Settings.SellPenalty == SellPenaltyKind.Always || 
+
+        if (Settings.SellPenalty == SellPenaltyKind.Always ||
             (Settings.SellPenalty == SellPenaltyKind.FreeBetweenRounds && Api.IsRoundActive()))
-            Api.AddCash(-this.CalculateSalaryWithDiscount(tower));
+        {
+            Api.AddCash(-this.CalculateSalaryWithDiscount(tower), tower.GetOwnerZeroBased());
+        }
     }
 }
 

@@ -4,7 +4,11 @@ using Assets.Scripts.Models.Difficulty;
 using Assets.Scripts.Models.Towers.Behaviors;
 using Assets.Scripts.Models.Towers.Mods;
 using Assets.Scripts.Simulation.SMath;
+using Assets.Scripts.Simulation.Towers;
 using Assets.Scripts.Simulation.Towers.Behaviors;
+using Assets.Scripts.Unity.Network;
+using Assets.Scripts.Unity.UI_New.InGame;
+using BloonsTD6.Mod.SalariedMonkeys.Structures;
 using BTD_Mod_Helper.Extensions;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
@@ -12,6 +16,41 @@ namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 [ExcludeFromCodeCoverage] // Only way to test these is in-game.
 internal static class BloonsExtensions
 {
+    /// <summary>
+    /// Returns a packed boolean array which denote which players are available
+    /// in the current game. Entries are zero indexed.
+    /// </summary>
+    public static PackedBoolArray GetPlayerIndices(this InGame inGame)
+    {
+        if (!inGame.IsCoop)
+            return new PackedBoolArray(1); // 0th element true
+
+        var players = inGame.coopGame.AllPlayers.GetEnumeratorCollections();
+        var result  = new PackedBoolArray();
+
+        while (players.MoveNext())
+        {
+            var player = players.Current.Cast<CoopPlayerInfo>();
+            MelonLogger.Msg(player.PlayerNumber - 1);
+            result.SetValue(player.PlayerNumber - 1, true);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Gets the zero based index of the player that owns the tower.
+    /// Returns P1 for unknown towers.
+    /// </summary>
+    public static int GetOwnerZeroBased(this Tower tower)
+    {
+        const int TOWER_NO_OWNER = -1;
+        if (tower.owner == TOWER_NO_OWNER)
+            return 0;
+
+        return tower.owner - 1;
+    }
+
     /// <summary>
     /// Gets all descendants and clones them, returning a mapping from old value to new value.
     /// </summary>

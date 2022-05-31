@@ -4,21 +4,15 @@ using Assets.Scripts.Models.Towers;
 using Assets.Scripts.Models.Towers.Mods;
 using Assets.Scripts.Simulation.Objects;
 using Assets.Scripts.Simulation.Towers;
-using Assets.Scripts.Unity;
+using Assets.Scripts.Unity.UI_New.InGame;
 using Assets.Scripts.Unity.UI_New.InGame.Stats;
 using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
 using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
 using Assets.Scripts.Unity.UI_New.Upgrade;
 using BloonsTD6.Mod.SalariedMonkeys.Implementation;
+using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BTD_Mod_Helper.Api.ModOptions;
-using BTD_Mod_Helper.Extensions;
-using Il2CppNewtonsoft.Json;
-using NinjaKiwi.LiNK;
-using NinjaKiwi.Players;
-using NinjaKiwi.Players.Files;
-using UnhollowerBaseLib;
-using String = Il2CppSystem.String;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 [assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
@@ -54,6 +48,7 @@ public class Mod : BloonsTD6Mod
         displayName = "Selling Mode",
     };
 
+    private static IBloonsApi Api => SalariedMonkeys.Api;
     private static SalariedMonkeys SalariedMonkeys => SalariedMonkeys.Instance;
     private static CashDisplay? _cashDisplay;
     private static ModSettings _modSettings = new ModSettings();
@@ -70,9 +65,16 @@ public class Mod : BloonsTD6Mod
         ApplySettings();
     }
 
+    public static void AfterAddEndOfRoundCash()
+    {
+        Log.Debug("AfterEndOfRoundCash");
+        InGame.instance.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.PaySalaries(x));
+    }
+
     public override void OnRoundEnd()
     {
-        SalariedMonkeys.PaySalaries();
+        Log.Debug("OnRoundEnd");
+        InGame.instance.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.SellTowers(x));
 
 #if DEBUG
         var towers = SalariedMonkeys.Api.GetTowers();
@@ -91,13 +93,22 @@ public class Mod : BloonsTD6Mod
     }
 
     // Hooks for updating cash display.
-    public override void OnTowerCreated(Tower tower, Entity target, Model modelToUse) => _invalidateCashDisplay = true;
+    public override void OnTowerCreated(Tower tower, Entity target, Model modelToUse)
+    {
+        Log.Debug("TowerCreated");
+        _invalidateCashDisplay = true;
+    }
 
-    public override void OnTowerUpgraded(Tower tower, string upgradeName, TowerModel newBaseTowerModel) => _invalidateCashDisplay = true;
+    public override void OnTowerUpgraded(Tower tower, string upgradeName, TowerModel newBaseTowerModel)
+    {
+        Log.Debug("TowerUpgraded");
+        _invalidateCashDisplay = true;
+    }
 
     public override void OnTowerDestroyed(Tower tower)
     {
         // Make the user pay for the tower for the round if selling before round end.
+        Log.Debug("TowerDestroyed");
         SalariedMonkeys.OnSellTower(tower);
         _invalidateCashDisplay = true;
     }
@@ -127,7 +138,7 @@ public class Mod : BloonsTD6Mod
         var text = instance.text;
         var rectTransform = text.rectTransform;
         rectTransform.offsetMax = new UnityEngine.Vector2(2000.0f, rectTransform.offsetMax.y); // Extend max text width
-        text.text += _cachedStringFormatter.GetSalary((float)SalariedMonkeys.TowerManager.GetTotalSalary());
+        text.text += _cachedStringFormatter.GetSalary((float)SalariedMonkeys.TowerManager.GetTotalSalary(Api.GetPlayerIndex()));
     }
 
     // Button to purchase tower on right side.
@@ -155,7 +166,7 @@ public class Mod : BloonsTD6Mod
 
         var upgradeCost = SalariedMonkeys.CalculateSalaryWithDiscount(upgrade, instance.tts.tower);
         instance.Cost.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
-        if (SalariedMonkeys.Api.GetCash() < upgradeCost)
+        if (SalariedMonkeys.Api.GetCash(Api.GetPlayerIndex()) < upgradeCost)
             instance.upgradeStatus = UpgradeButton.UpgradeStatus.CanNotAfford;
     }
 

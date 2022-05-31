@@ -8,7 +8,7 @@ namespace BloonsTD6.Mod.SalariedMonkeys.Tests;
 public class SalariedMonkeysTests
 {
     [Fact]
-    public void PaySalaries_WhenException_RestoresSellStatus()
+    public void SellTowers_WhenException_RestoresSellStatus()
     {
         // Arrange
         var api = CreateDefaultTestApi();
@@ -17,7 +17,7 @@ public class SalariedMonkeysTests
         var fakeTowerManager = CreateMock<ITowerManager>(x =>
         {
             x.Setup(y => y.BloonsApi).Returns(api);
-            x.Setup(y => y.SellTowers(It.IsAny<float>())).Throws<Exception>(); // Just in case.
+            x.Setup(y => y.SellTowers(0, It.IsAny<float>())).Throws<Exception>(); // Just in case.
         });
         
         var salariedMonkeys = new SalariedMonkeys();
@@ -25,17 +25,19 @@ public class SalariedMonkeysTests
         
         // Act & Assert
         // Test with allowSelling On
-        salariedMonkeys.PaySalaries();
+        salariedMonkeys.PaySalaries(0);
+        salariedMonkeys.SellTowers(0);
         Assert.True(api.AllowSelling);
 
         // Test with allowSelling Off
         api.AllowSelling = false;
-        salariedMonkeys.PaySalaries();
+        salariedMonkeys.PaySalaries(0);
+        salariedMonkeys.SellTowers(0);
         Assert.False(api.AllowSelling);
     }
 
     [Fact]
-    public void PaySalaries_WhenNegativeSalary_SellsTowers()
+    public void SellTowers_WhenNegativeSalary_SellsTowers()
     {
         // Arrange
         var calledSellFunction = new StrongBox<bool>(false);
@@ -44,8 +46,8 @@ public class SalariedMonkeysTests
 
         var towerManagerMock = new Mock<ITowerManager>();
         towerManagerMock.Setup(y => y.BloonsApi).Returns(api);
-        towerManagerMock.Setup(y => y.GetAvailableSalary(out totalSalary)).Returns(-100.0f); // Negative Salary
-        towerManagerMock.Setup(y => y.SellTowers(It.IsAny<float>())).Callback(() => calledSellFunction.Value = true);
+        towerManagerMock.Setup(y => y.GetAvailableSalary(0, out totalSalary)).Returns(-100.0f); // Negative Salary
+        towerManagerMock.Setup(y => y.SellTowers(0, It.IsAny<float>())).Callback(() => calledSellFunction.Value = true);
 
         var fakeTowerManager = towerManagerMock.Object;
         var salariedMonkeys  = new SalariedMonkeys();
@@ -53,7 +55,8 @@ public class SalariedMonkeysTests
 
         // Act & Assert
         // Test with allowSelling On
-        salariedMonkeys.PaySalaries();
+        salariedMonkeys.PaySalaries(0);
+        salariedMonkeys.SellTowers(0);
         Assert.True(calledSellFunction.Value);
     }
 }

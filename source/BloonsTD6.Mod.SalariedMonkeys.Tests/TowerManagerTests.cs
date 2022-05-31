@@ -19,8 +19,8 @@ public class TowerManagerTests
         {
             // Create towers.
             // Total Cost: 10000
-            mock.Setup(api => api.GetCash()).Returns(totalCash);
-            mock.Setup(api => api.GetTowers()).Returns(() => new List<ISalariedTower>()
+            mock.Setup(api => api.GetCash(0)).Returns(totalCash);
+            mock.Setup(api => api.GetTowers(0)).Returns(() => new List<ISalariedTower>()
             {
                 CreateMock<ISalariedTower>(tower => tower.Setup(x => x.GetTotalCost()).Returns(1000.0f)),
                 CreateMock<ISalariedTower>(tower => tower.Setup(x => x.GetTotalCost()).Returns(2000.0f)),
@@ -31,8 +31,8 @@ public class TowerManagerTests
         
         // Act & Assert
         var towerManager = new TowerManager(fakeBloonsApi, new ModSettings() { CostPercentPerRound = costPercentPerRound });
-        Assert.Equal(expectedResult, towerManager.GetTotalSalary());
-        Assert.Equal(availableSalary, towerManager.GetAvailableSalary(out _));
+        Assert.Equal(expectedResult, towerManager.GetTotalSalary(0));
+        Assert.Equal(availableSalary, towerManager.GetAvailableSalary(0, out _));
     }
 
     [Theory]
@@ -50,7 +50,7 @@ public class TowerManagerTests
 
         // Act
         var towerManager = new TowerManager(fakeBloonsApi, new ModSettings() { CostPercentPerRound = costPercentPerRound });
-        towerManager.SellTowers(salaryRequired);
+        towerManager.SellTowers(0, salaryRequired);
 
         // Assert
         Assert.Equal(expectedTowersSold, fakeBloonsApi.TowersSold);
