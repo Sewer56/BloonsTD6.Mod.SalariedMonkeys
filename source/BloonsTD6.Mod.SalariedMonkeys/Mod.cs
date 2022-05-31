@@ -60,12 +60,6 @@ public class Mod : BloonsTD6Mod
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
     private static bool _invalidateCashDisplay = false;
 
-    
-    public override void OnApplicationStart()
-    {
-        ProfileSwitcher.Initialize();
-    }
-
     public override void OnTitleScreen()
     {
         // Initialise Mod.

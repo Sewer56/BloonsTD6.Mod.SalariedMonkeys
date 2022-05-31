@@ -69,29 +69,3 @@ public class SelectedUpgrade_SetUpgrade
     [HarmonyPostfix]
     public static void Postfix(SelectedUpgrade __instance) => Mod.AfterUpgradeDetails_UpdateSelected(__instance);
 }
-
-#region Native Hooks
-internal class Hooks
-{
-    /// <summary>
-    /// Uses IntPtr to ignore the generic type! Beware!!
-    /// </summary>
-    public static Il2CppNativeHookable<FileStorage_LoadFn> LoadFromFileStorage = new (
-        AccessTools.Method(typeof(FileStorage), nameof(FileStorage.load), new Type[]
-        {
-            typeof(string),
-            typeof(PasswordGenerator),
-            typeof(JsonSerializerSettings),
-            typeof(SaveStrategy),
-            typeof(bool)
-        }, new[] { typeof(Identity) }));
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate IntPtr FileStorage_LoadFn(Il2CppNativeHookVariable<string> path,
-        Il2CppNativeHookVariable<PasswordGenerator> passwordGenerator,
-        Il2CppNativeHookVariable<JsonSerializerSettings> jsonSettings,
-        SaveStrategy saveStrategy,
-        bool ignoreIfNotReadable,
-        IntPtr genericMethod);
-}
-#endregion
