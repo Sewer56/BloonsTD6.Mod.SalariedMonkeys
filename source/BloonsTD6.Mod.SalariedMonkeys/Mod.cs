@@ -77,7 +77,7 @@ public class Mod : BloonsTD6Mod
         InGame.instance.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.SellTowers(x));
 
 #if DEBUG
-        var towers = SalariedMonkeys.Api.GetTowers();
+        var towers = SalariedMonkeys.Api.GetTowers(0);
         var totalCost = towers.Sum(x => x.GetTotalCost());
         MelonLogger.Msg($"Total Tower Cost: {totalCost}");
 #endif
