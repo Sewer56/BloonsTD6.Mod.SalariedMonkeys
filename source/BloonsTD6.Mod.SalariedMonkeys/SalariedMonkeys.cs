@@ -32,7 +32,7 @@ public class SalariedMonkeys
     /// </summary>
     public bool IsInitialized { get; private set; } = false;
 
-    public ModSettings Settings => TowerManager.Settings;
+    public ModClientSettings Settings => TowerManager.Settings;
     public IBloonsApi Api => TowerManager.BloonsApi;
 
     private Dictionary<string, float> _upgradeToCost = null!;

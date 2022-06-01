@@ -8,9 +8,9 @@ public class TowerManager : ITowerManager
     public IBloonsApi BloonsApi { get; set; }
 
     /// <inheritdoc/>
-    public ModSettings Settings { get; set; }
+    public ModClientSettings Settings { get; set; }
 
-    public TowerManager(IBloonsApi bloonsApi, ModSettings settings)
+    public TowerManager(IBloonsApi bloonsApi, ModClientSettings settings)
     {
         BloonsApi = bloonsApi;
         Settings = settings;

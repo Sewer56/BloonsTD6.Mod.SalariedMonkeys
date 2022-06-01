@@ -30,7 +30,7 @@ public class TowerManagerTests
         });
         
         // Act & Assert
-        var towerManager = new TowerManager(fakeBloonsApi, new ModSettings() { CostPercentPerRound = costPercentPerRound });
+        var towerManager = new TowerManager(fakeBloonsApi, new ModClientSettings() { CostPercentPerRound = costPercentPerRound });
         Assert.Equal(expectedResult, towerManager.GetTotalSalary(0));
         Assert.Equal(availableSalary, towerManager.GetAvailableSalary(0, out _));
     }
@@ -49,7 +49,7 @@ public class TowerManagerTests
         var initialTowerCount = fakeBloonsApi.Towers.Count;
 
         // Act
-        var towerManager = new TowerManager(fakeBloonsApi, new ModSettings() { CostPercentPerRound = costPercentPerRound });
+        var towerManager = new TowerManager(fakeBloonsApi, new ModClientSettings() { CostPercentPerRound = costPercentPerRound });
         towerManager.SellTowers(0, salaryRequired);
 
         // Assert

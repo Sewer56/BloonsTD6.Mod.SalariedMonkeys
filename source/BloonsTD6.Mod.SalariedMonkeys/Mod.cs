@@ -43,6 +43,11 @@ public class Mod : BloonsTD6Mod
         displayName = "Disable Income",
     };
 
+    private static readonly ModSettingBool ShowSalaryUi = new ModSettingBool(true)
+    {
+        displayName = "Show Salary (Beside Cash)",
+    };
+
     private static readonly ModSettingEnum<SellPenaltyKind> SellPenalty = new ModSettingEnum<SellPenaltyKind>(SellPenaltyKind.FreeBetweenRounds)
     {
         displayName = "Selling Mode",
@@ -51,7 +56,7 @@ public class Mod : BloonsTD6Mod
     private static IBloonsApi Api => SalariedMonkeys.Api;
     private static SalariedMonkeys SalariedMonkeys => SalariedMonkeys.Instance;
     private static CashDisplay? _cashDisplay;
-    private static ModSettings _modSettings = new ModSettings();
+    private static ModClientSettings _modSettings = new ModClientSettings();
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
     private static bool _invalidateCashDisplay = false;
 
@@ -62,8 +67,10 @@ public class Mod : BloonsTD6Mod
         CostPercentPerRound.OnValueChanged.Add(SetCostPerRoundFromSlider);
         DisableIncome.OnValueChanged.Add(SetDisableIncome);
         SellPenalty.OnValueChanged.Add(SetSellPenaltyType);
+        ShowSalaryUi.OnValueChanged.Add(SetShowSalaryUI);
         ApplySettings();
     }
+
 
     public static void AfterAddEndOfRoundCash()
     {
@@ -134,6 +141,8 @@ public class Mod : BloonsTD6Mod
     public static void AfterCashDisplay_OnCashChanged(CashDisplay instance)
     {
         _cashDisplay = instance;
+        if (!_modSettings.ShowSalaryInUI)
+            return;
 
         var text = instance.text;
         var rectTransform = text.rectTransform;
@@ -208,6 +217,9 @@ public class Mod : BloonsTD6Mod
     // IMF Loan Display, We need to move icon right so doesn't interfere with our cash counter.
     public static void LoanDisplay_Initialise(LoanDisplay loanDisplay)
     {
+        if (!_modSettings.ShowSalaryInUI)
+            return;
+
         var pos = loanDisplay.transform.position;
         pos.x += 100;
         loanDisplay.transform.position = pos;
@@ -238,8 +250,7 @@ public class Mod : BloonsTD6Mod
     }
 
     private void SetSellPenaltyType(SellPenaltyKind value) => _modSettings.SellPenalty = value;
-
     private void SetDisableIncome(bool value) => _modSettings.DisableIncome = value;
-
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);
+    private void SetShowSalaryUI(bool value) => _modSettings.ShowSalaryInUI = value;
 }

@@ -31,5 +31,5 @@ public static class SalariedTowerExtensions
     /// </summary>
     /// <param name="tower">The tower in question.</param>
     /// <param name="settings">The settings for the mod.</param>
-    public static float GetSalary(this ISalariedTower tower, ModSettings settings) => settings.CalculateCost(tower.GetTotalCost());
+    public static float GetSalary(this ISalariedTower tower, ModClientSettings settings) => settings.CalculateCost(tower.GetTotalCost());
 }

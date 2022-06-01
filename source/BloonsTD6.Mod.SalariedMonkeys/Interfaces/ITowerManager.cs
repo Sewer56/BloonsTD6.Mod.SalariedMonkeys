@@ -13,7 +13,7 @@ public interface ITowerManager
     /// <summary>
     /// Settings of the mod itself.
     /// </summary>
-    ModSettings Settings { get; set; }
+    ModClientSettings Settings { get; set; }
 
     /// <summary>
     /// Returns the amount of available salary.
