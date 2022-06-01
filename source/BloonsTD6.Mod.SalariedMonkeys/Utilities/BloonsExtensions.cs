@@ -1,17 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Assets.Scripts.Models;
-using Assets.Scripts.Models.Difficulty;
-using Assets.Scripts.Models.Towers.Behaviors;
-using Assets.Scripts.Models.Towers.Mods;
-using Assets.Scripts.Simulation.SMath;
-using Assets.Scripts.Simulation.Towers;
-using Assets.Scripts.Simulation.Towers.Behaviors;
-using Assets.Scripts.Unity.Network;
-using Assets.Scripts.Unity.UI_New.InGame;
-using BloonsTD6.Mod.SalariedMonkeys.Structures;
-using BTD_Mod_Helper.Extensions;
-
-namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 
 [ExcludeFromCodeCoverage] // Only way to test these is in-game.
 internal static class BloonsExtensions

@@ -1,12 +1,4 @@
-﻿using Assets.Scripts.Models;
-using Assets.Scripts.Models.Towers;
-using Assets.Scripts.Models.Towers.Upgrades;
-using Assets.Scripts.Simulation.Towers;
-using Assets.Scripts.Unity;
-using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
-using BloonsTD6.Mod.SalariedMonkeys.Structures;
-using BloonsTD6.Mod.SalariedMonkeys.Utilities;
-using BTD_Mod_Helper.Extensions;
+﻿using Math = System.Math;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
 

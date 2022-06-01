@@ -1,6 +1,4 @@
-﻿using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
-
-namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
 
 public class TowerManager : ITowerManager
 {

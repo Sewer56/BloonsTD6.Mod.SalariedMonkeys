@@ -1,12 +1,4 @@
-﻿using Assets.Scripts.Models;
-using Assets.Scripts.Models.Towers;
-using Assets.Scripts.Models.Towers.Mods;
-using Assets.Scripts.Simulation.Objects;
-using Assets.Scripts.Simulation.Towers;
-using Assets.Scripts.Unity.UI_New.InGame;
-using BloonsTD6.Mod.SalariedMonkeys.Implementation;
-using BloonsTD6.Mod.SalariedMonkeys.Utilities;
-using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
+﻿using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
 

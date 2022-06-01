@@ -1,10 +1,4 @@
-﻿using Assets.Scripts.Simulation.Towers;
-using Assets.Scripts.Unity.UI_New.InGame;
-using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
-using BloonsTD6.Mod.SalariedMonkeys.Structures;
-using BTD_Mod_Helper.Extensions;
-
-namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
 
 internal class SalariedTower : ISalariedTower
 {

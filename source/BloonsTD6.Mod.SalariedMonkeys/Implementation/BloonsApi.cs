@@ -1,11 +1,4 @@
-﻿using Assets.Scripts.Simulation.SMath;
-using Assets.Scripts.Simulation.Towers.Behaviors;
-using Assets.Scripts.Unity.UI_New.InGame;
-using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
-using BloonsTD6.Mod.SalariedMonkeys.Utilities;
-using BTD_Mod_Helper.Extensions;
-
-namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys.Implementation;
 
 internal class BloonsApi : IBloonsApi
 {

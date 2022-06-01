@@ -1,9 +1,4 @@
-﻿using Assets.Scripts.Models.Towers.Upgrades;
-using Assets.Scripts.Simulation.Towers;
-using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
-using BloonsTD6.Mod.SalariedMonkeys.Utilities;
-
-namespace BloonsTD6.Mod.SalariedMonkeys.Structures;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys.Structures;
 
 public class TowerInfo
 {

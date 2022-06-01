@@ -1,14 +1,4 @@
-﻿using Assets.Scripts.Models;
-using Assets.Scripts.Models.Towers.Mods;
-using Assets.Scripts.Simulation.SimulationBehaviors;
-using Assets.Scripts.Unity.UI_New.InGame.Stats;
-using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
-using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
-using Assets.Scripts.Unity.UI_New.Upgrade;
-using HarmonyLib;
-
-// ReSharper disable InconsistentNaming
-
+﻿// ReSharper disable InconsistentNaming
 namespace BloonsTD6.Mod.SalariedMonkeys;
 
 [HarmonyPatch(typeof(TowerPurchaseButton), nameof(TowerPurchaseButton.Update))]

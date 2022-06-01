@@ -1,9 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Assets.Scripts.Unity.UI_New.InGame.Stats;
-using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
-using BloonsTD6.Mod.SalariedMonkeys.Utilities;
-
-[assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
+﻿[assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
 
 namespace BloonsTD6.Mod.SalariedMonkeys;

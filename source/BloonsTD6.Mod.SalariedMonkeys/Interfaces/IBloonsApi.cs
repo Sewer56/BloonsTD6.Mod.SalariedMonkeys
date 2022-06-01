@@ -1,9 +1,4 @@
-﻿using Assets.Scripts.Simulation.SMath;
-using Assets.Scripts.Simulation.Towers;
-using Assets.Scripts.Simulation.Towers.Behaviors;
-using BloonsTD6.Mod.SalariedMonkeys.Utilities;
-
-namespace BloonsTD6.Mod.SalariedMonkeys.Interfaces;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 
 /// <summary>
 /// Abstracts a set of common game utility functions.

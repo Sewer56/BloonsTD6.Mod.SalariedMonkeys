@@ -1,10 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Assets.Scripts.Unity.UI_New.InGame.Stats;
-using Assets.Scripts.Unity.UI_New.InGame.StoreMenu;
-using Assets.Scripts.Unity.UI_New.InGame.TowerSelectionMenu;
-using Assets.Scripts.Unity.UI_New.Upgrade;
-
-namespace BloonsTD6.Mod.SalariedMonkeys;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys;
 
 /// <summary>
 /// This class contains all code specific to performing the UI hooks.

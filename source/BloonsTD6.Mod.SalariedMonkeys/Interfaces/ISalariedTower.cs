@@ -1,6 +1,4 @@
-﻿using BloonsTD6.Mod.SalariedMonkeys.Structures;
-
-namespace BloonsTD6.Mod.SalariedMonkeys.Interfaces;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys.Interfaces;
 
 /// <summary>
 /// Represents an individual salaried tower.

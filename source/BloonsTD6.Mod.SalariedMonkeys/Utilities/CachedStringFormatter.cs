@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
+﻿namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 
 /// <summary>
 /// String formatter that caches the resultant strings.

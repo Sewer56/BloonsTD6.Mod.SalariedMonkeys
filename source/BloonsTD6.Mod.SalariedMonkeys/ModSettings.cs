@@ -21,7 +21,6 @@ public class ModSharedSettings : ModServerSettings
 
 }
 
-
 /// <summary>
 /// Settings that need to be synced for all players.
 /// </summary>
