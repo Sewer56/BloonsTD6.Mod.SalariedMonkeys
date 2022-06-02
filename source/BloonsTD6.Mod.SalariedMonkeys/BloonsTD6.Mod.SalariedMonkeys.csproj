@@ -52,6 +52,9 @@
     <Reference Include="Il2CppNewtonsoft.Json.dll">
       <HintPath>..\Dependencies\Il2CppNewtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json.dll">
+      <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
+    </Reference>
 
     <Reference Include="System.Net.Http" />
   </ItemGroup>

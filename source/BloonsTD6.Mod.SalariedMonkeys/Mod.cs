@@ -1,4 +1,6 @@
-﻿[assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
+﻿using System.Runtime.InteropServices;
+
+[assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
@@ -21,7 +23,7 @@ public partial class Mod : BloonsTD6Mod
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
     private static CashDisplay? _cashDisplay;
     private static bool _invalidateCashDisplay = false;
-
+    
     public override void OnTitleScreen() => Initialize_Settings();
 
     public override void OnMatchEnd()

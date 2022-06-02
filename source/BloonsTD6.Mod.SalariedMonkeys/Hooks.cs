@@ -1,4 +1,10 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using NinjaKiwi.LiNK.Lobbies;
+using NinjaKiwi.NKMulti;
+using NKMultiConnection = NinjaKiwi.NKMulti.NKMultiConnection;
+using Task = Il2CppSystem.Threading.Tasks.Task;
+
 namespace BloonsTD6.Mod.SalariedMonkeys;
 
 [HarmonyPatch(typeof(TowerPurchaseButton), nameof(TowerPurchaseButton.Update))]

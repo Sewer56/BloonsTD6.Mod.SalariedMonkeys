@@ -1,4 +1,8 @@
-﻿namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
+﻿using Assets.Scripts.Unity.UI_New.Coop;
+using NinjaKiwi.LiNK.Lobbies;
+using NinjaKiwi.NKMulti;
+
+namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 
 [ExcludeFromCodeCoverage] // Only way to test these is in-game.
 internal static class BloonsExtensions
