@@ -34,13 +34,13 @@ public partial class Mod
     public override void OnTowerCreated(Tower tower, Entity target, Model modelToUse)
     {
         Log.Debug("TowerCreated");
-        _invalidateCashDisplay = true;
+        _invalidateCashDisplayTimer = 3;
     }
 
     public override void OnTowerUpgraded(Tower tower, string upgradeName, TowerModel newBaseTowerModel)
     {
         Log.Debug("TowerUpgraded");
-        _invalidateCashDisplay = true;
+        _invalidateCashDisplayTimer = 3;
     }
 
     public override void OnTowerDestroyed(Tower tower)
@@ -48,7 +48,7 @@ public partial class Mod
         // Make the user pay for the tower for the round if selling before round end.
         Log.Debug("TowerDestroyed");
         SalariedMonkeys.OnSellTower(tower);
-        _invalidateCashDisplay = true;
+        _invalidateCashDisplayTimer = 3;
     }
 
     // Disable income in other modes.

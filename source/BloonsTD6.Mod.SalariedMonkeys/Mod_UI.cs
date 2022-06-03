@@ -16,17 +16,19 @@ public partial class Mod
     private void OnUpdate_UI()
     {
         /*
-            Limit updates of certain UI elements to 1 per frame.
+            Limit updates of certain UI elements to a fixed interval.
 
-            This is also a questionable bugfix to salary display in cash counter 
+            This is a very questionable bugfix to salary display in cash counter 
             not updating correctly when buying an upgrade that applies a discount.
         */
 
-        if (!_invalidateCashDisplay)
+        if (_invalidateCashDisplayTimer >= 0)
+            _invalidateCashDisplayTimer--;
+
+        if (_invalidateCashDisplayTimer != 0)
             return;
 
         _cashDisplay?.OnCashChanged();
-        _invalidateCashDisplay = false;
     }
 
     // Cash display on top of screen

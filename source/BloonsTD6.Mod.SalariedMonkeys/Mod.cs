@@ -22,7 +22,7 @@ public partial class Mod : BloonsTD6Mod
     private static ModClientSettings _modSettings = new ModClientSettings();
     private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
     private static CashDisplay? _cashDisplay;
-    private static bool _invalidateCashDisplay = false;
+    private static int _invalidateCashDisplayTimer = 1;
     
     public override void OnTitleScreen() => Initialize_Settings();
 
