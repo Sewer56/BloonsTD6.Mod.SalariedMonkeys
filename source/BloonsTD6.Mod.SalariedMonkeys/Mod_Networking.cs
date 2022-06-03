@@ -26,7 +26,7 @@ public partial class Mod
         if (!nkGi.IsCoOpHost())
             return;
 
-        Log.Debug($"Joined Lobby as Host, Sending Settings.");
+        Log.Always($"Joined Lobby as Host, Sending Settings.");
         nkGi.SendMessageEx((ModServerSettings)_modSettings, null, MSG_SYNCSETTINGS);
     }
 
@@ -34,7 +34,7 @@ public partial class Mod
 
     public override void OnDisconnected(NKMultiGameInterface nkGi)
     {
-        Log.Debug($"Disconnected. Restoring settings.");
+        Log.Always($"Disconnected. Restoring settings.");
         _modSettings.Map(_netplaySettingsBackup);
     }
 
@@ -47,12 +47,12 @@ public partial class Mod
                 
                 // Let's not trust clients :)
                 if (_nkGi.IsCoOpHost()) 
-                    return Log.Debug(true, $"Is Host. Ignoring Sync Code.");
+                    return Log.Always(true, $"Is Host. Ignoring sync Code.");
 
                 // Apply settings.
                 var data = MessageUtils.ReadMessage<ModServerSettings>(message);
                 _modSettings.Map(data);
-                return Log.Debug(true, $"Applied server settings.");
+                return Log.Always(true, $"Applied server settings.");
 
             default:
                 return false;
@@ -66,9 +66,9 @@ public partial class Mod
     {
         // Only handle if host.
         if (!_nkGi.IsCoOpHost())
-            return Log.Debug(true, $"Peer connected but not host, ignoring.");
+            return Log.Always(true, $"Peer connected but not host, ignoring.");
         
         _nkGi!.SendToPeer(peerId, MessageUtils.CreateMessageEx((ModServerSettings)_modSettings, MSG_SYNCSETTINGS));
-        return Log.Debug(true, $"Connected and host. Sent settings sync.");
+        return Log.Always(true, $"Connected and host. Sent settings sync.");
     }
 }
