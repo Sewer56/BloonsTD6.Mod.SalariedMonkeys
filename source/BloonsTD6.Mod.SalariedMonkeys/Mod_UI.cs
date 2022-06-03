@@ -37,6 +37,9 @@ public partial class Mod
             return;
 
         var text = instance.text;
+        if (text == null)
+            return;
+
         var rectTransform = text.rectTransform;
         rectTransform.offsetMax = new UnityEngine.Vector2(2000.0f, rectTransform.offsetMax.y); // Extend max text width
         text.text += _cachedStringFormatter.GetSalary((float)SalariedMonkeys.TowerManager.GetTotalSalary(Api.GetPlayerIndex()));
