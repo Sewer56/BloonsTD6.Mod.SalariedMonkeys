@@ -25,7 +25,7 @@ internal class BloonsApi : IBloonsApi
         InGame.instance.bridge.OnCashChangedSim();
     }
 
-    public List<ISalariedTower> GetTowers(int playerIndex)
+    public List<ISalariedTower> GetTowers(int? playerIndex)
     {
         // We use this specific method because it doesn't include towers that have been destroyed.
         var towers = InGame.instance.GetAllTowerToSim();
@@ -33,7 +33,7 @@ internal class BloonsApi : IBloonsApi
         
         foreach (var tower in towers)
         {
-            if (tower.tower.GetOwnerZeroBased() == playerIndex)
+            if (!playerIndex.HasValue || tower.tower.GetOwnerZeroBased() == playerIndex)
                 list.Add(new SalariedTower(tower.tower, SalariedMonkeys.Instance.GetTowerInfo(tower.tower)));
         }
         

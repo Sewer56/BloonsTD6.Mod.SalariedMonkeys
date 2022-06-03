@@ -1,5 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 
+using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
 using NinjaKiwi.LiNK.Lobbies;
 using NinjaKiwi.NKMulti;
 using NKMultiConnection = NinjaKiwi.NKMulti.NKMultiConnection;
@@ -64,4 +65,24 @@ public class BonusCashPerRound_OnRoundEnd
 {
     [HarmonyPostfix]
     public static void Postfix() => Mod.AfterAddEndOfRoundCash();
+}
+
+[HarmonyPatch(typeof(BloodSacrifice), nameof(BloodSacrifice.Activate))]
+public class BloodSacrifice_Activate
+{
+    [HarmonyPrefix]
+    public static void Prefix(BloodSacrifice __instance) => Mod.OnAdoraBloodSacrifice(__instance);
+
+    [HarmonyPostfix]
+    public static void Postfix(BloodSacrifice __instance) => Mod.AfterAdoraBloodSacrifice(__instance);
+}
+
+[HarmonyPatch(typeof(ParagonTower), nameof(ParagonTower.GetTowerInvestment))]
+public class ParagonTower_StartSacrifice
+{
+    [HarmonyPrefix]
+    public static void Prefix(ParagonTower __instance, ref Tower towerToUse) => Mod.OnParagonGetTowerInvestment(__instance, towerToUse);
+
+    [HarmonyPostfix]
+    public static void Postfix(ParagonTower __instance, ref Tower towerToUse) => Mod.AfterParagonGetTowerInvestment(__instance, towerToUse);
 }

@@ -27,8 +27,8 @@ public interface IBloonsApi
     /// <summary>
     /// Returns a list of currently placed towers for a given player.
     /// </summary>
-    /// <param name="playerIndex">Index of the player to get towers for.</param>
-    List<ISalariedTower> GetTowers(int playerIndex);
+    /// <param name="playerIndex">Index of the player to get towers for. Null means get all towers.</param>
+    List<ISalariedTower> GetTowers(int? playerIndex);
 
     /// <summary>
     /// Toggles whether selling is enabled or not.

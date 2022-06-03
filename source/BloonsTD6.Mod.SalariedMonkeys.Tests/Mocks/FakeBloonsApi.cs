@@ -24,7 +24,7 @@ internal class FakeBloonsApi : IBloonsApi
 
     public void AddCash(double amount, int playerIndex) => Cash += amount;
 
-    public List<ISalariedTower> GetTowers(int playerIndex) => Towers;
+    public List<ISalariedTower> GetTowers(int? playerIndex) => Towers;
 
     public bool? ToggleSelling(bool allowSelling)
     {
