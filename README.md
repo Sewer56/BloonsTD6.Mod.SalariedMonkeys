@@ -22,8 +22,8 @@ Simply extract the DLL to your `Mods` directory.
 - ✅ Accurate Costs/Salary in Menus.  
 - ✅ Combine with Other Mods Cleanly.  
 - ✅ Disable Income.  
+- ⚠️ Co-Op (Implemented but not extensively tested).  
 - ❌ Setting presets (Needs mod helper update!).  
-- ❌ Co-Op (Need testing help).  
 - ❌ Geraldo (Thinking about best course of action for it).  
 
 ## Building
