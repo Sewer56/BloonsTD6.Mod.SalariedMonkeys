@@ -60,7 +60,7 @@ public class SelectedUpgrade_SetUpgrade
 }
 
 [HarmonyPatch(typeof(BonusCashPerRound), nameof(BonusCashPerRound.OnRoundEnd))]
-public class Simulation_RoundEnd
+public class BonusCashPerRound_OnRoundEnd
 {
     [HarmonyPostfix]
     public static void Postfix() => Mod.AfterAddEndOfRoundCash();
