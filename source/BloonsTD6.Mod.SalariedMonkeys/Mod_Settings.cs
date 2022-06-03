@@ -26,9 +26,12 @@ public partial class Mod
         displayName = "Show Salary (Beside Cash)",
     };
 
-    private static readonly ModSettingEnum<SellPenaltyKind> SellPenalty = new ModSettingEnum<SellPenaltyKind>(SellPenaltyKind.FreeBetweenRounds)
+    private static readonly ModSettingInt SellPenalty = new ModSettingInt((int)SellPenaltyKind.FreeBetweenRounds)
     {
         displayName = "Selling Mode",
+        isSlider = true,
+        minValue = (long?) SellPenaltyKind.Always,
+        maxValue = (long?) SellPenaltyKind.Free
     };
 
     /// <summary>
@@ -40,6 +43,7 @@ public partial class Mod
         DisableIncome.OnValueChanged.Add(SetDisableIncome);
         SellPenalty.OnValueChanged.Add(SetSellPenaltyType);
         ShowSalaryUi.OnValueChanged.Add(SetShowSalaryUI);
+        SellPenalty.OnInitialized.Add(PrintSellPenaltyModes);
         ApplySettings();
     }
 
@@ -55,8 +59,27 @@ public partial class Mod
     }
 
     // Event Handlers //
-    private void SetSellPenaltyType(SellPenaltyKind value) => _modSettings.SellPenalty = value;
+    private void SetSellPenaltyType(long value) => _modSettings.SellPenalty = (SellPenaltyKind) value;
     private void SetDisableIncome(bool value) => _modSettings.DisableIncome = value;
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);
     private void SetShowSalaryUI(bool value) => _modSettings.ShowSalaryInUI = value;
+
+    // Temporary Stuff //
+    private void PrintSellPenaltyModes(SharedOption option)
+    {
+        Log.Always(">= About Settings Limitations =<");
+        Log.NoMelon("Note: Dropdowns aren't available in Mod Helper and settings are being reworked for 3.0.\n" +
+                   "It's not worth the time implementing them in current release so please bear with the sliders.\n\n" +
+                   "== Sell Modes ==\n");
+        
+        PrintSetting(SellPenaltyKind.Always, "Selling always incurs a cost penalty.");
+        PrintSetting(SellPenaltyKind.FreeBetweenRounds, "[Default] Selling is free between rounds, otherwise costs money.");
+        PrintSetting(SellPenaltyKind.Free, "Selling always free.");
+    }
+
+    private void PrintSetting<T>(T enumerable, string description) where T : Enum
+    {
+        Log.NoMelonNoLine(ConsoleColor.Green, $"({(int)(object)enumerable}) {enumerable}: ");
+        Log.NoMelon(description);
+    }
 }
