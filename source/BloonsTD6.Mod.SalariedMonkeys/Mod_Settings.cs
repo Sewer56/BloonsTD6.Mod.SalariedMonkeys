@@ -28,7 +28,7 @@ public partial class Mod
 
     private static readonly ModSettingInt SellPenalty = new ModSettingInt((int)SellPenaltyKind.FreeBetweenRounds)
     {
-        displayName = "Selling Mode",
+        displayName = "Selling Mode (See Log)",
         isSlider = true,
         minValue = (long?) SellPenaltyKind.Always,
         maxValue = (long?) SellPenaltyKind.Free
