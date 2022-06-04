@@ -20,18 +20,47 @@ public partial class Mod : BloonsTD6Mod
     private static IBloonsApi Api => SalariedMonkeys.Api;
     private static SalariedMonkeys SalariedMonkeys => SalariedMonkeys.Instance;
     private static ModClientSettings _modSettings = new ModClientSettings();
-    private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
-    private static CashDisplay? _cashDisplay;
     private static int _invalidateCashDisplayTimer = 1;
     
     public override void OnTitleScreen() => Initialize_Settings();
 
     public override void OnMatchEnd()
     {
-        // TODO: This is a hack! Find a better way to do this.
         OnMatchEnd_UI();
         OnMatchEnd_Core();
         GC.Collect();
+    }
+
+    // Sell towers when the round ends.
+    public override void OnRoundEnd()
+    {
+        Log.Debug("OnRoundEnd");
+        OnRoundEnd_Core();
+        OnRoundEnd_UI();
+
+#if DEBUG
+        var towers = SalariedMonkeys.Api.GetTowers(0);
+        var totalCost = towers.Sum(x => x.GetTotalCost());
+        MelonLogger.Msg($"Total Tower Cost: {totalCost}");
+#endif
+    }
+
+    public override void OnTowerCreated(Tower tower, Entity target, Model modelToUse)
+    {
+        Log.Debug("TowerCreated");
+        OnTowerCreated_UI(tower, target, modelToUse);
+    }
+
+    public override void OnTowerUpgraded(Tower tower, string upgradeName, TowerModel newBaseTowerModel)
+    {
+        Log.Debug("TowerUpgraded");
+        OnTowerUpgraded_UI(tower, upgradeName, newBaseTowerModel);
+    }
+
+    public override void OnTowerDestroyed(Tower tower)
+    {
+        Log.Debug($"TowerDestroyed, Worth {tower.worth}");
+        OnTowerDestroyed_UI(tower);
     }
 
     // Executed every frame.

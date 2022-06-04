@@ -34,6 +34,14 @@ public partial class Mod
         maxValue = (long?) SellPenaltyKind.Free
     };
 
+    private static readonly ModSettingInt SellPriceDisplay = new ModSettingInt((int)SellPriceDisplayMode.SalaryOnly)
+    {
+        displayName = "Sell Price Display Mode (See Log)",
+        isSlider = true,
+        minValue = (long?)SellPriceDisplayMode.TowerWorth,
+        maxValue = (long?)SellPriceDisplayMode.TowerWorthAndSalary
+    };
+
     /// <summary>
     /// Initializes all settings code on boot.
     /// </summary>
@@ -43,6 +51,8 @@ public partial class Mod
         DisableIncome.OnValueChanged.Add(SetDisableIncome);
         SellPenalty.OnValueChanged.Add(SetSellPenaltyType);
         ShowSalaryUi.OnValueChanged.Add(SetShowSalaryUI);
+        SellPriceDisplay.OnValueChanged.Add(SetSellPriceDisplayMode);
+
         SellPenalty.OnInitialized.Add(PrintSellPenaltyModes);
         ApplySettings();
     }
@@ -56,10 +66,12 @@ public partial class Mod
         SetDisableIncome(DisableIncome);
         SetSellPenaltyType(SellPenalty);
         SetShowSalaryUI(ShowSalaryUi);
+        SetSellPriceDisplayMode(SellPriceDisplay);
     }
 
     // Event Handlers //
     private void SetSellPenaltyType(long value) => _modSettings.SellPenalty = (SellPenaltyKind) value;
+    private void SetSellPriceDisplayMode(long value) => _modSettings.SellPriceDisplayMode = (SellPriceDisplayMode)value;
     private void SetDisableIncome(bool value) => _modSettings.DisableIncome = value;
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);
     private void SetShowSalaryUI(bool value) => _modSettings.ShowSalaryInUI = value;
@@ -75,6 +87,11 @@ public partial class Mod
         PrintSetting(SellPenaltyKind.Always, "Selling always incurs a cost penalty.");
         PrintSetting(SellPenaltyKind.FreeBetweenRounds, "[Default] Selling is free between rounds, otherwise costs money.");
         PrintSetting(SellPenaltyKind.Free, "Selling always free.");
+
+        Log.NoMelon("\n== Sell Price Display Modes ==");
+        PrintSetting(SellPriceDisplayMode.TowerWorth, "Displays the total salary paid for the tower during the course of the game.");
+        PrintSetting(SellPriceDisplayMode.SalaryOnly, "[Default] Displays the salary paid at the end of each round.");
+        PrintSetting(SellPriceDisplayMode.TowerWorthAndSalary, "Displays both items above.");
     }
 
     private void PrintSetting<T>(T enumerable, string description) where T : Enum

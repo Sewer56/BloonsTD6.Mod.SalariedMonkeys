@@ -11,10 +11,16 @@ public class ModClientSettings : ModSharedSettings, IMappable<ModClientSettings>
     /// </summary>
     public bool ShowSalaryInUI { get; set; } = true;
 
+    /// <summary>
+    /// Changes how the sell price of the tower is displayed on the UI.
+    /// </summary>
+    public SellPriceDisplayMode SellPriceDisplayMode { get; set; } = SellPriceDisplayMode.SalaryOnly;
+
     // It would be really nice to have 3rd party library access here so I could use Mapster.
     public void Map(in ModClientSettings other)
     {
         ShowSalaryInUI = other.ShowSalaryInUI;
+        SellPriceDisplayMode = other.SellPriceDisplayMode;
         base.Map(other);
     }
 }
@@ -85,4 +91,11 @@ public enum SellPenaltyKind
     /// Selling is always free and costs no money.
     /// </summary>
     Free,
+}
+
+public enum SellPriceDisplayMode
+{
+    TowerWorth,
+    SalaryOnly,
+    TowerWorthAndSalary,
 }

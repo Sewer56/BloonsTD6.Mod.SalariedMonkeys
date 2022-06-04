@@ -5,11 +5,22 @@
 /// </summary>
 public partial class Mod
 {
+    private static CachedStringFormatter _cachedStringFormatter = new CachedStringFormatter();
+    private static CashDisplay? _cashDisplay;
+    private static TowerSelectionMenu? _towerSelectionMenu = null;
+
     private void OnMatchEnd_UI()
     {
         _cashDisplay = null;
+        _towerSelectionMenu = null;
         _cachedStringFormatter.Clear();
     }
+
+    // Shared Events
+    private void OnRoundEnd_UI() => _towerSelectionMenu?.UpdateTower();
+    private void OnTowerCreated_UI(Tower tower, Entity target, Model modelToUse) => _invalidateCashDisplayTimer = 3;
+    private void OnTowerUpgraded_UI(Tower tower, string upgradeName, TowerModel newBaseTowerModel) => _invalidateCashDisplayTimer = 3;
+    private void OnTowerDestroyed_UI(Tower tower) => _invalidateCashDisplayTimer = 3;
 
     // Events running every frame corresponding to UI
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,6 +90,7 @@ public partial class Mod
     // Selection menu on right/left hand side. Sell text.
     public static void AfterTowerSelectionMenu_OnUpdate(TowerSelectionMenu instance)
     {
+        _towerSelectionMenu = instance;
         if (instance.sellText == null || instance.selectedTower == null)
             return;
 
@@ -86,14 +98,20 @@ public partial class Mod
         if (tower == null)
             return;
 
-        var upgradeCost = SalariedMonkeys.CalculateSalaryWithDiscount(tower);
+        var towerSalary = SalariedMonkeys.CalculateSalaryWithDiscount(tower);
 
         // Geraldo item hotfix until I decide if to give him special treatment or not.
         // Unknown items have a cost of 0.
-        if (upgradeCost == 0)
+        if (towerSalary == 0)
             return;
 
-        instance.sellText.text = _cachedStringFormatter.GetUpgradeCostWithDollar(upgradeCost);
+        instance.sellText.text = _modSettings.SellPriceDisplayMode switch
+        {
+            SellPriceDisplayMode.TowerWorth => $"{tower.worth:####0.#}",
+            SellPriceDisplayMode.SalaryOnly => $"-{towerSalary:####0.#}",
+            SellPriceDisplayMode.TowerWorthAndSalary => $"{tower.worth:####0.#}\n(-{towerSalary:####0.#})",
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 
     // Upgrade menu. Can be accessed from main menu.
