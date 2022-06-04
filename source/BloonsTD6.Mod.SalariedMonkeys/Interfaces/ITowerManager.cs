@@ -24,7 +24,9 @@ public interface ITowerManager
     /// <summary>
     /// Returns the amount of payable money to the monkeys.
     /// </summary>
-    double GetTotalSalary(int playerIndex);
+    /// <param name="playerIndex">Index of the player to</param>
+    /// <param name="increaseTowerWorth">Increases the tower instances' total worth.</param>
+    double GetTotalSalary(int playerIndex, bool increaseTowerWorth = false);
 
     /// <summary>
     /// Sells all towers, starting from cheapest tower until salary demand is met.

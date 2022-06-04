@@ -20,6 +20,12 @@ public interface ISalariedTower
     /// Sells the tower in question.
     /// </summary>
     void Sell();
+
+    /// <summary>
+    /// Increases the total worth of the tower by a set amount.
+    /// </summary>
+    /// <param name="amount">The amount to increase the worth by.</param>
+    void IncreaseWorth(float amount);
 }
 
 public static class SalariedTowerExtensions

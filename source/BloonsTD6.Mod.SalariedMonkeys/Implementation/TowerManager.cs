@@ -22,13 +22,19 @@ public class TowerManager : ITowerManager
     }
 
     /// <inheritdoc/>
-    public double GetTotalSalary(int playerIndex)
+    public double GetTotalSalary(int playerIndex, bool increaseTowerWorth = false)
     {
         var towers = BloonsApi.GetTowers(playerIndex);
         var totalSalary = 0.0;
-        
+
         foreach (var tower in towers)
-            totalSalary += tower.GetSalary(Settings);
+        {
+            var salary = tower.GetSalary(Settings);
+            if (increaseTowerWorth)
+                tower.IncreaseWorth(salary);
+            
+            totalSalary += salary;
+        }
 
         return totalSalary;
     }

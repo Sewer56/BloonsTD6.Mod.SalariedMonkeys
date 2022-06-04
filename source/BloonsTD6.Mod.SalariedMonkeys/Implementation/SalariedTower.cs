@@ -16,4 +16,6 @@ internal class SalariedTower : ISalariedTower
     public float GetTotalCost() => TowerInfo.CalculateCostWithDiscounts(BloonsApi.Instance, BaseTower);
 
     public void Sell() => InGame.instance.SellTower(BaseTower);
+
+    public void IncreaseWorth(float amount) => BaseTower.worth += amount;
 }

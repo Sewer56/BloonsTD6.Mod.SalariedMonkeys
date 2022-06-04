@@ -6,6 +6,40 @@ Usually in a tower defense game, you buy a tower and you upgrade a tower. You pa
 
 Introducing Monkeys for Hire, a mod that changes Bloons such that the monkeys are paid contractors as opposed to fixed cost towers.
 
+## About the Mod
+
+Monkeys for Hire is a custom game mode; which applies over all existing game modes.  
+
+### Core Rules
+- At the end of each round, monkeys are paid a salary based on their total cost (+ upgrades).  
+- You can see this salary counter on the top of the screen (beside cash display).  
+- Selling towers is free in between rounds, however incurs the penalty of 1 round's worth of salary if performed mid-round.  
+- Once the player is in debt, towers will be forcefully sold until the player can once again afford them.  
+- Income is disabled.  
+
+Some core rules are configurable, please see `Mod Settings`.
+
+### Strategy Notes
+- By default, the cost of a tower is paid over the course of 20 rounds.  
+    - Anything bought more than 20 rounds before last round is more expensive.  
+    - Anything bought in the last 20 rounds can be considerably cheaper.  
+  
+- When hitting debt, towers are sold in increasing order of cost (from the cheapest), until salary decreases by the same amount of cash as you are in debt.
+    - In co-op, players have their own separate salaries and only have their own towers sold, as such it's possible to strategically sell by transferring money.  
+
+- Adora's XP Bonus (& Paragon degree bonus) are based on the total amount of salary paid to the tower.  
+    - This persists between saved games (if played with mod).  
+    - Sacrificing long term, mid game carrying towers that fall off late game can yield large XP bonus.  
+    - Place your paragon sacrifices early 😉.  
+
+### Interesting Trivia
+
+- This is (probably) the first custom game mode with co-op support.  
+    - This mod is responsible for fixing and expanding [Mod Helper's networking capabilities](https://github.com/gurrenm3/BTD-Mod-Helper/pull/42).  
+    - I made the [Multi-User](https://github.com/Sewer56/BloonsTD6.Mod.MultiUser) to test this mod, allowing people to co-op with themselves on one computer.  
+  
+- It's my first mod for a Unity based game (and Bloons).  
+
 ## Download
 
 You can find the download for the mod in the [Releases Section on GitHub](https://github.com/Sewer56/BloonsTD6.Mod.SalariedMonkeys/releases/latest).  
@@ -15,13 +49,14 @@ Simply extract the DLL to your `Mods` directory.
 
 ✅ indicates a feature is implemented.  
 ⚠️ indicates a feature is not yet complete.  
-❌ indicates a feature is not yet implemented.
+❌ indicates a feature is not yet implemented.  
 
 - ✅ Mod Settings.  
 - ✅ Cost Scaling per Difficulty.  
-- ✅ Accurate Costs/Salary in Menus.  
-- ✅ Combine with Other Mods Cleanly.  
+- ✅ Accurate costs/salary in Menus.  
+- ✅ Combines with Other Mods.  
 - ✅ Disable Income.  
+- ✅ Sacrifices (Adora & Paragons).  
 - ⚠️ Co-Op (Implemented but not extensively tested).  
 - ❌ Setting presets (Needs mod helper update!).  
 - ❌ Geraldo (Thinking about best course of action for it).  

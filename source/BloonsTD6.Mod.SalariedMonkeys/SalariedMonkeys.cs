@@ -84,7 +84,7 @@ public class SalariedMonkeys
     /// Pays the salaries to all the monkeys.
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
-    public void PaySalaries(int playerIndex) => Api.AddCash(-TowerManager.GetTotalSalary(playerIndex), playerIndex);
+    public void PaySalaries(int playerIndex) => Api.AddCash(-TowerManager.GetTotalSalary(playerIndex, true), playerIndex);
 
     /// <summary>
     /// Sells towers if the player is in the negative.
@@ -116,6 +116,7 @@ public class SalariedMonkeys
     /// <param name="tower">The tower to be sold.</param>
     public void OnSellTower(Tower tower)
     {
+        tower.worth = 0;
         if (ForceFreeSelling || Settings.SellPenalty == SellPenaltyKind.Free)
             return;
 

@@ -1,10 +1,8 @@
 ﻿// ReSharper disable InconsistentNaming
 
+using Assets.Scripts.Simulation.Action;
 using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
-using NinjaKiwi.LiNK.Lobbies;
-using NinjaKiwi.NKMulti;
-using NKMultiConnection = NinjaKiwi.NKMulti.NKMultiConnection;
-using Task = Il2CppSystem.Threading.Tasks.Task;
+using TowerManager = Assets.Scripts.Simulation.Towers.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
 
@@ -67,22 +65,9 @@ public class BonusCashPerRound_OnRoundEnd
     public static void Postfix() => Mod.AfterAddEndOfRoundCash();
 }
 
-[HarmonyPatch(typeof(BloodSacrifice), nameof(BloodSacrifice.Activate))]
-public class BloodSacrifice_Activate
+[HarmonyPatch(typeof(TowerManager), nameof(TowerManager.SellTower))]
+public class SellTower_Run
 {
     [HarmonyPrefix]
-    public static void Prefix(BloodSacrifice __instance) => Mod.OnAdoraBloodSacrifice(__instance);
-
-    [HarmonyPostfix]
-    public static void Postfix(BloodSacrifice __instance) => Mod.AfterAdoraBloodSacrifice(__instance);
-}
-
-[HarmonyPatch(typeof(ParagonTower), nameof(ParagonTower.GetTowerInvestment))]
-public class ParagonTower_StartSacrifice
-{
-    [HarmonyPrefix]
-    public static void Prefix(ParagonTower __instance, ref Tower towerToUse) => Mod.OnParagonGetTowerInvestment(__instance, towerToUse);
-
-    [HarmonyPostfix]
-    public static void Postfix(ParagonTower __instance, ref Tower towerToUse) => Mod.AfterParagonGetTowerInvestment(__instance, towerToUse);
+    public static void Postfix(TowerManager __instance, ref Tower tower) => Mod.OnSellTower(tower);
 }
