@@ -41,11 +41,6 @@ public struct PackedBoolArray
     }
 
     /// <summary>
-    /// Returns true if this array is empty/zero.
-    /// </summary>
-    public bool IsEmpty() => _value == 0;
-
-    /// <summary>
     /// Runs a piece of code for each true value.
     /// </summary>
     /// <param name="action">Action to execute. Parameter is array index.</param>

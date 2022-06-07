@@ -4,13 +4,6 @@
 internal static class BloonsExtensions
 {
     /// <summary>
-    /// Finds a tower with a specified ID.
-    /// </summary>
-    /// <param name="inGame">Instance of the game.</param>
-    /// <param name="id">The ID to search for.</param>
-    public static Tower? GetTowerById(this InGame inGame, int id) => inGame.GetTowerManager()?.GetTowerById(id);
-
-    /// <summary>
     /// Returns a packed boolean array which denote which players are available
     /// in the current game. Entries are zero indexed.
     /// </summary>
