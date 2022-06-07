@@ -16,6 +16,14 @@ public partial class Mod
         isSlider = true
     };
 
+    private static readonly ModSettingDouble FreeplaySalaryMultiplier = new ModSettingDouble(20.00)
+    {
+        displayName = "Freeplay (Round 100+) Salary Percent",
+        minValue = 0.0,
+        maxValue = 100.0,
+        isSlider = true
+    };
+
     private static readonly ModSettingBool DisableIncome = new ModSettingBool(true)
     {
         displayName = "Disable Income",
@@ -52,6 +60,7 @@ public partial class Mod
         SellPenalty.OnValueChanged.Add(SetSellPenaltyType);
         ShowSalaryUi.OnValueChanged.Add(SetShowSalaryUI);
         SellPriceDisplay.OnValueChanged.Add(SetSellPriceDisplayMode);
+        FreeplaySalaryMultiplier.OnValueChanged.Add(SetFreeplaySalaryMultiplier);
 
         SellPenalty.OnInitialized.Add(PrintSellPenaltyModes);
         ApplySettings();
@@ -62,11 +71,12 @@ public partial class Mod
     /// </summary>
     private void ApplySettings()
     {
-        SetCostPerRoundFromSlider((double)CostPercentPerRound.GetValue());
+        SetCostPerRoundFromSlider(CostPercentPerRound);
         SetDisableIncome(DisableIncome);
         SetSellPenaltyType(SellPenalty);
         SetShowSalaryUI(ShowSalaryUi);
         SetSellPriceDisplayMode(SellPriceDisplay);
+        SetFreeplaySalaryMultiplier(FreeplaySalaryMultiplier);
     }
 
     // Event Handlers //
@@ -74,6 +84,7 @@ public partial class Mod
     private void SetSellPriceDisplayMode(long value) => _modSettings.SellPriceDisplayMode = (SellPriceDisplayMode)value;
     private void SetDisableIncome(bool value) => _modSettings.DisableIncome = value;
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);
+    private void SetFreeplaySalaryMultiplier(double d) => _modSettings.FreeplaySalaryMultiplier = (float)(d / 100.0);
     private void SetShowSalaryUI(bool value) => _modSettings.ShowSalaryInUI = value;
 
     // Temporary Stuff //

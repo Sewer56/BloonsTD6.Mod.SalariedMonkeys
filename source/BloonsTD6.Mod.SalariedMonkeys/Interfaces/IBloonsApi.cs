@@ -42,6 +42,11 @@ public interface IBloonsApi
     bool IsRoundActive();
 
     /// <summary>
+    /// True if the player is in freeplay mode for Salaried Monkeys, else false.
+    /// </summary>
+    bool IsFreeplay();
+
+    /// <summary>
     /// Retrieves the info of all the discounts applicable to a given position on the map.
     /// </summary>
     /// <param name="position">Position of the tower.</param>

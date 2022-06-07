@@ -34,6 +34,7 @@ internal class FakeBloonsApi : IBloonsApi
     }
 
     public bool IsRoundActive() => IsRoundActiveValue;
+    public bool IsFreeplay() => false;
 
     public Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Collections.Generic.List<DiscountZone>> GetDiscountInfo(Vector3 position, int path, int tier)
     {

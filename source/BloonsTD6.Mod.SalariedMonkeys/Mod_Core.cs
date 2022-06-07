@@ -46,7 +46,7 @@ public partial class Mod
             if (mod.name != ModeType.CHIMPS) 
                 continue;
 
-            result.endRound += 5;
+            result.endRound += 40;
             break;
         }
 

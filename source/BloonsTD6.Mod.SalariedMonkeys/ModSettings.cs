@@ -51,6 +51,11 @@ public class ModServerSettings : IMappable<ModServerSettings>
     public float CostPercentPerRound { get; set; } = 0.05f;
 
     /// <summary>
+    /// Salary multiplier for rounds past 100.
+    /// </summary>
+    public float FreeplaySalaryMultiplier { get; set; } = 0.2f;
+
+    /// <summary>
     /// If set to true, all forms of money generation are disabled.
     /// </summary>
     public bool DisableIncome { get; set; } = true;
@@ -64,7 +69,19 @@ public class ModServerSettings : IMappable<ModServerSettings>
     /// Calculates a new cost based on the modifiers specified in this settings page.
     /// </summary>
     /// <param name="baseCost">The original cost.</param>
-    public float CalculateCost(float baseCost) => (baseCost * CostPercentPerRound);
+    /// <param name="isFreeplay">Whether the player is in Freeplay mode or not.</param>
+    public float CalculateCost(float baseCost, bool isFreeplay) => ApplyFreeplayMultiplier(baseCost * CostPercentPerRound, isFreeplay);
+
+    /// <summary>
+    /// Applies the freeplay multiplier to a given value.
+    /// </summary>
+    private float ApplyFreeplayMultiplier(float value, bool isFreeplay)
+    {
+        if (!isFreeplay)
+            return value;
+
+        return value * FreeplaySalaryMultiplier;
+    }
 
     // It would be really nice to have 3rd party library access here so I could use Mapster.
     public void Map(in ModServerSettings other)

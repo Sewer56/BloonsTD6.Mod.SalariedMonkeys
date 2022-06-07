@@ -19,6 +19,7 @@ public partial class Mod
     // Shared Events
     private void OnRoundEnd_UI() => _towerSelectionMenu?.UpdateTower();
     private void OnTowerCreated_UI(Tower tower, Entity target, Model modelToUse) => _invalidateCashDisplayTimer = 3;
+
     private void OnTowerUpgraded_UI(Tower tower, string upgradeName, TowerModel newBaseTowerModel) => _invalidateCashDisplayTimer = 3;
     private void OnTowerDestroyed_UI(Tower tower) => _invalidateCashDisplayTimer = 3;
 

@@ -34,6 +34,7 @@ public static class SalariedTowerExtensions
     /// Returns the salary per round for this tower.
     /// </summary>
     /// <param name="tower">The tower in question.</param>
+    /// <param name="isFreeplay">True if the player is in freeplay mode, else false.</param>
     /// <param name="settings">The settings for the mod.</param>
-    public static float GetSalary(this ISalariedTower tower, ModClientSettings settings) => settings.CalculateCost(tower.GetTotalCost());
+    public static float GetSalary(this ISalariedTower tower, bool isFreeplay, ModClientSettings settings) => settings.CalculateCost(tower.GetTotalCost(), isFreeplay);
 }

@@ -140,7 +140,7 @@ public static class SalariedMonkeysExtensions
     public static float CalculateSalary(this SalariedMonkeys monkeys, TowerModel model)
     {
         var baseCost = monkeys.GetTowerInfo(model).TotalCost;
-        return monkeys.Settings.CalculateCost(baseCost);
+        return monkeys.Settings.CalculateCost(baseCost, monkeys.Api.IsFreeplay());
     }
 
     /// <summary>
@@ -153,7 +153,7 @@ public static class SalariedMonkeysExtensions
         var baseCost = monkeys.GetTowerInfo(model)
                               .CalculateCostWithDiscounts(monkeys.Api, model);
 
-        return monkeys.Settings.CalculateCost(baseCost);
+        return monkeys.Settings.CalculateCost(baseCost, monkeys.Api.IsFreeplay());
     }
 
     /// <summary>
@@ -164,7 +164,7 @@ public static class SalariedMonkeysExtensions
     public static float CalculateSalary(this SalariedMonkeys monkeys, UpgradeModel upgrade)
     {
         var baseCost = monkeys.GetRawUpgradeCost(upgrade);
-        return monkeys.Settings.CalculateCost(baseCost);
+        return monkeys.Settings.CalculateCost(baseCost, monkeys.Api.IsFreeplay());
     }
 
     /// <summary>

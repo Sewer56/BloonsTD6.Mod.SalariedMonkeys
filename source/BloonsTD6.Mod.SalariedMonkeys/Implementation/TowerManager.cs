@@ -22,7 +22,7 @@ public class TowerManager : ITowerManager
 
         foreach (var tower in towers)
         {
-            var salary = tower.GetSalary(Settings);
+            var salary = tower.GetSalary(BloonsApi.IsFreeplay(), Settings);
             if (increaseTowerWorth)
                 tower.IncreaseWorth(salary);
             
@@ -49,7 +49,7 @@ public class TowerManager : ITowerManager
             if (tower == null)
                 break;
 
-            salaryGained += tower.GetSalary(Settings);
+            salaryGained += tower.GetSalary(BloonsApi.IsFreeplay(), Settings);
             tower.Sell();
             towers.Remove(tower);
         }
