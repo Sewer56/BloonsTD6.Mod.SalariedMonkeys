@@ -17,6 +17,8 @@ Monkeys for Hire is a custom game mode; which applies over all existing game mod
 - Once the player is in debt, towers will be forcefully sold until the player can once again afford them.  
 - Passing Round 100 enters freeplay 'deflation' mode, where tower costs are altered such that you're slowly expected to burn your remaining cash.  
 - In order to win, player must complete final round with a positive amount of cash.  
+    - In co-op, the sum of all players' cash must be positive.  
+
 - Income is disabled.  
 
 Some core rules are configurable, please see `Mod Settings`.
