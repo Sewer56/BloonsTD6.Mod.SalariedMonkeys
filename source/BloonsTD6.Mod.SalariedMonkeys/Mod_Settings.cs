@@ -16,7 +16,7 @@ public partial class Mod
         isSlider = true
     };
 
-    private static readonly ModSettingDouble FreeplaySalaryMultiplier = new ModSettingDouble(20.00)
+    private static readonly ModSettingDouble FreeplaySalaryMultiplier = new ModSettingDouble(25.00)
     {
         displayName = "Freeplay (Round 100+) Salary Percent",
         minValue = 0.0,

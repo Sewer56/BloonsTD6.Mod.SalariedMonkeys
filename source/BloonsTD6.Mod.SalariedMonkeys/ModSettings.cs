@@ -53,7 +53,7 @@ public class ModServerSettings : IMappable<ModServerSettings>
     /// <summary>
     /// Salary multiplier for rounds past 100.
     /// </summary>
-    public float FreeplaySalaryMultiplier { get; set; } = 0.2f;
+    public float FreeplaySalaryMultiplier { get; set; } = 0.25f;
 
     /// <summary>
     /// If set to true, all forms of money generation are disabled.
