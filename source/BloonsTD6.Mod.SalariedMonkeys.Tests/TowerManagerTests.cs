@@ -32,7 +32,6 @@ public class TowerManagerTests
         // Act & Assert
         var towerManager = new TowerManager(fakeBloonsApi, new ModClientSettings() { CostPercentPerRound = costPercentPerRound });
         Assert.Equal(expectedResult, towerManager.GetTotalSalary(0));
-        Assert.Equal(availableSalary, towerManager.GetAvailableSalary(0, out _));
     }
 
     [Theory]

@@ -43,10 +43,10 @@ public class SalariedMonkeysTests
         var calledSellFunction = new StrongBox<bool>(false);
         var totalSalary = 0.0;
         var api = CreateDefaultTestApi();
+        api.Cash = -100.0f; // Negative Salary
 
         var towerManagerMock = new Mock<ITowerManager>();
         towerManagerMock.Setup(y => y.BloonsApi).Returns(api);
-        towerManagerMock.Setup(y => y.GetAvailableSalary(0, out totalSalary)).Returns(-100.0f); // Negative Salary
         towerManagerMock.Setup(y => y.SellTowers(0, It.IsAny<float>())).Callback(() => calledSellFunction.Value = true);
 
         var fakeTowerManager = towerManagerMock.Object;

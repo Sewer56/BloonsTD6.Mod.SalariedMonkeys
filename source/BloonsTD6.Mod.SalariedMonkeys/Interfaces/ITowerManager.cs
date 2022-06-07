@@ -16,12 +16,6 @@ public interface ITowerManager
     ModClientSettings Settings { get; set; }
 
     /// <summary>
-    /// Returns the amount of available salary.
-    /// </summary>
-    /// <returns></returns>
-    double GetAvailableSalary(int playerIndex, out double totalSalary);
-
-    /// <summary>
     /// Returns the amount of payable money to the monkeys.
     /// </summary>
     /// <param name="playerIndex">Index of the player to</param>

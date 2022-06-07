@@ -13,14 +13,7 @@ public class TowerManager : ITowerManager
         BloonsApi = bloonsApi;
         Settings = settings;
     }
-
-    /// <inheritdoc/>
-    public double GetAvailableSalary(int playerIndex, out double totalSalary)
-    {
-        totalSalary = GetTotalSalary(playerIndex);
-        return BloonsApi.GetCash(playerIndex) - totalSalary;
-    }
-
+    
     /// <inheritdoc/>
     public double GetTotalSalary(int playerIndex, bool increaseTowerWorth = false)
     {

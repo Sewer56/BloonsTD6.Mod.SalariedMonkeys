@@ -15,7 +15,6 @@ public partial class Mod
         InGame.instance.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.SellTowers(x));
     }
 
-
     // We inject into the cash add function because Co-Op sends out a synchronization message
     // before the round end call, which makes syncing during round end more dangerous.
     public static void AfterAddEndOfRoundCash()

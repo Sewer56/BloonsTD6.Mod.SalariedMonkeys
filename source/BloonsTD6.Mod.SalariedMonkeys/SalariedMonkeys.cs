@@ -92,15 +92,17 @@ public class SalariedMonkeys
     public void SellTowers(int playerIndex)
     {
         // Enable selling temporarily if necessary.
+        var cash = Api.GetCash(playerIndex);
+        if (cash >= 0)
+            return;
+
         ForceFreeSelling = true;
         bool? originalSellState = null;
 
         try
         {
             originalSellState = Api.ToggleSelling(true);
-            var available = TowerManager.GetAvailableSalary(playerIndex, out double totalSalary);
-            if (available < 0)
-                TowerManager.SellTowers(playerIndex, (float)Math.Abs(available));
+            TowerManager.SellTowers(playerIndex, (float)Math.Abs(cash));
         }
         finally
         {
