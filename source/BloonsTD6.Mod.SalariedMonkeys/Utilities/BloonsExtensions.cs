@@ -25,7 +25,6 @@ internal static class BloonsExtensions
         while (players.MoveNext())
         {
             var player = players.Current.Cast<CoopPlayerInfo>();
-            MelonLogger.Msg(player.PlayerNumber - 1);
             result.SetValue(player.PlayerNumber - 1, true);
         }
 
