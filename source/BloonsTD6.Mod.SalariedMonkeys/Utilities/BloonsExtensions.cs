@@ -25,6 +25,15 @@ internal static class BloonsExtensions
     }
 
     /// <summary>
+    /// Returns true if the player is currently at the last round.
+    /// </summary>
+    public static bool IsLastRound(this InGame inGame)
+    {
+        var spawner = inGame.GetMap().spawner;
+        return spawner.CurrentRound == spawner.endRound;
+    }
+
+    /// <summary>
     /// Gets the zero based index of the player that owns the tower.
     /// Returns P1 for unknown towers.
     /// </summary>

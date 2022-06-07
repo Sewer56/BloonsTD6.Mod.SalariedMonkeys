@@ -2,6 +2,7 @@
 
 using Assets.Scripts.Simulation.Action;
 using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
+using Assets.Scripts.Unity.Bridge;
 using TowerManager = Assets.Scripts.Simulation.Towers.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
@@ -69,5 +70,19 @@ public class BonusCashPerRound_OnRoundEnd
 public class SellTower_Run
 {
     [HarmonyPrefix]
-    public static void Postfix(TowerManager __instance, ref Tower tower) => Mod.OnSellTower(tower);
+    public static void Prefix(TowerManager __instance, ref Tower tower) => Mod.OnSellTower(tower);
+}
+
+[HarmonyPatch(typeof(UnityToSimulation), nameof(UnityToSimulation.Win))]
+public class WinAction_Run
+{
+    [HarmonyPrefix]
+    public static bool Prefix(UnityToSimulation __instance) => Mod.BeforeRunWinAction(__instance);
+}
+
+[HarmonyPatch(typeof(InGame), nameof(InGame.RoundEnd))]
+internal class InGame_RoundEnd
+{
+    [HarmonyPrefix]
+    public static void Prefix() => Mod.BeforeRoundEnd();
 }

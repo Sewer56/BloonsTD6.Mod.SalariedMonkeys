@@ -9,6 +9,32 @@ public partial class Mod
 {
     private void OnMatchEnd_Core() => SalariedMonkeys.DeInitialize();
 
+    // Handle lose condition on round end.
+    private static bool _isLosing = false;
+
+    public static bool BeforeRunWinAction()
+    {
+        if (!_isLosing)
+            return true;
+
+        _isLosing = false;
+        return false; // Skip original
+    }
+
+    public static void BeforeRoundEnd()
+    {
+        var instance = InGame.instance;
+        var totalCash = 0.0;
+        
+        InGame.instance.GetPlayerIndices().ForEachTrue(x => totalCash += Api.GetCash(x));
+        if (instance.IsLastRound() && totalCash < 0.0)
+        {
+            // Prevent win from triggering
+            instance.GetUnityToSimulation().Lose();
+            _isLosing = true;
+        }
+    }
+    
     // Sell towers when the round ends.
     public void OnRoundEnd_Core()
     {
