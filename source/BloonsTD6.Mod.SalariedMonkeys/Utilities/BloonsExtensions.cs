@@ -63,7 +63,7 @@ internal static class BloonsExtensions
     /// <param name="model">The current game model.</param>
     public static void DisableIncome(this GameModel model)
     {
-        if (model.difficultyId == ModeType.CHIMPS)
+        if (model.gameMode == ModeType.CHIMPS)
             return;
 
         // Disable Income

@@ -39,6 +39,17 @@ public partial class Mod
     // Initialize GameMode
     public static void AfterCreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods)
     {
+        // If the gamemode is chimps, increase round count.
+        // Note: GameMode variable is not yet set, so we inspect the model list for expected name.
+        foreach (var mod in mods)
+        {
+            if (mod.name != ModeType.CHIMPS) 
+                continue;
+
+            result.endRound += 5;
+            break;
+        }
+
         SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings), result);
     }
 }
