@@ -116,16 +116,20 @@ public class SalariedMonkeys
     /// Event handler for when the user sells a tower.
     /// </summary>
     /// <param name="tower">The tower to be sold.</param>
-    public void OnSellTower(Tower tower)
+    /// <param name="increaseTowerWorth">True to increase tower worth by the sell amount.</param>
+    public void OnSellTower(Tower tower, bool increaseTowerWorth = false)
     {
-        tower.worth = 0;
         if (ForceFreeSelling || Settings.SellPenalty == SellPenaltyKind.Free)
             return;
 
         if (Settings.SellPenalty == SellPenaltyKind.Always ||
             (Settings.SellPenalty == SellPenaltyKind.FreeBetweenRounds && Api.IsRoundActive()))
         {
-            Api.AddCash(-this.CalculateSalaryWithDiscount(tower), tower.GetOwnerZeroBased());
+            var sellAmount = this.CalculateSalaryWithDiscount(tower);
+            if (increaseTowerWorth)
+                tower.worth += sellAmount;
+
+            Api.AddCash(-sellAmount, tower.GetOwnerZeroBased());
         }
     }
 }

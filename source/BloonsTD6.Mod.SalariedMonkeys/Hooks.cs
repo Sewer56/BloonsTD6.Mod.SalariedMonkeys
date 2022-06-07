@@ -77,7 +77,7 @@ public class SellTower_Run
 public class WinAction_Run
 {
     [HarmonyPrefix]
-    public static bool Prefix(UnityToSimulation __instance) => Mod.BeforeRunWinAction(__instance);
+    public static bool Prefix() => Mod.BeforeRunWinAction();
 }
 
 [HarmonyPatch(typeof(InGame), nameof(InGame.RoundEnd))]
@@ -85,4 +85,11 @@ internal class InGame_RoundEnd
 {
     [HarmonyPrefix]
     public static void Prefix() => Mod.BeforeRoundEnd();
+}
+
+[HarmonyPatch(typeof(BloodSacrifice), nameof(BloodSacrifice.Activate))]
+public class BloodSacrifice_Activate
+{
+    [HarmonyPrefix]
+    public static void Prefix(BloodSacrifice __instance) => Mod.BeforeActivateBloodSacrifice(__instance);
 }

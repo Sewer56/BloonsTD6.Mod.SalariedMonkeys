@@ -29,6 +29,11 @@ Some core rules are configurable, please see `Mod Settings`.
     - This persists between saved games (if played with mod).  
     - Sacrificing long term, mid game carrying towers that fall off late game can yield large XP bonus.  
 
+- Blood Sacrifice (Adora) uses the same rules as selling.  
+    - Cash penalty for mid-round sacrifice.  
+    - The cash penalty still counts towards XP given.  
+    - Free between rounds.  
+
 ### Trivia
 
 - This is (probably) the first custom game mode with co-op support.  

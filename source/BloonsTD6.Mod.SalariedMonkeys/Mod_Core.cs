@@ -1,4 +1,5 @@
-﻿using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
+﻿using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
+using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
 
@@ -49,8 +50,20 @@ public partial class Mod
         InGame.instance.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.PaySalaries(x));
     }
 
-    // Hooks for updating cash display.
-    public static void OnSellTower(Tower tower) => SalariedMonkeys.OnSellTower(tower);
+    // Blood sacrifice adora.
+    public static void BeforeActivateBloodSacrifice(BloodSacrifice sacrifice)
+    {
+        var tower = InGame.instance.GetTowerManager().GetTowerById(sacrifice.selectedTowerId);
+        if (tower != null)
+            SalariedMonkeys.OnSellTower(tower, true);
+    }
+
+    // Performs cash changes for tower sell.
+    public static void OnSellTower(Tower tower)
+    {
+        tower.worth = 0;
+        SalariedMonkeys.OnSellTower(tower);
+    }
 
     // Disable income in other modes.
     public static void OnCreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods)
