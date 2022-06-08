@@ -82,11 +82,10 @@ public partial class Mod
         // Note: GameMode variable is not yet set, so we inspect the model list for expected name.
         foreach (var mod in mods)
         {
-            if (mod.name != ModeType.CHIMPS) 
-                continue;
-
-            result.endRound += 40;
-            break;
+            if (mod.name == ModeType.CHIMPS) 
+                result.endRound += 40;
+            else if (mod.name == ModeType.Impoppable)
+                result.endRound += 40;
         }
 
         SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings), result);
