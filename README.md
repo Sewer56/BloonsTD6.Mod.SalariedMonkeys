@@ -36,6 +36,10 @@ Some core rules are configurable, please see `Mod Settings`.
     - The cash penalty still counts towards XP given.  
     - Free between rounds.  
 
+- Paragons are discountable!  
+    - Allows for Elite boss events to be completable.  
+    - For the purposes of balancing, Tier 4 towers can also be discounted now.  
+
 ### Trivia
 
 - This is (probably) the first custom game mode with co-op support.  
@@ -52,7 +56,6 @@ Some core rules are configurable, please see `Mod Settings`.
 
 - In ***CHIMPS***, save up for Freeplay (Round > 100)!  
     - It is recommended to have around $30,000 spare cash.  
-    - It may be necessary to buy a Paragon for Round 140!  
 
 </details>
 
@@ -77,7 +80,8 @@ Some core rules are configurable, please see `Mod Settings`.
 ## Tested GameModes
 - CHIMPS (140 Rounds)  
 - Impoppable (140 Rounds)  
-- Boss Event 'Bloonarius' Elite    
+- Boss Event 'Bloonarius' Elite  
+    - Very difficult. Good luck.  
 
 ## Download
 
