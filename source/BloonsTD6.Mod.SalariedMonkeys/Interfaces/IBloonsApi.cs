@@ -47,6 +47,17 @@ public interface IBloonsApi
     bool IsFreeplay();
 
     /// <summary>
+    /// True if the player is currently in-game and participating in a boss event.
+    /// </summary>
+    bool IsBossEvent();
+
+    /// <summary>
+    /// Returns the current round counter.
+    /// Round is returned indexed 1, equal to game's UI.
+    /// </summary>
+    int GetCurrentRound();
+
+    /// <summary>
     /// Retrieves the info of all the discounts applicable to a given position on the map.
     /// </summary>
     /// <param name="position">Position of the tower.</param>

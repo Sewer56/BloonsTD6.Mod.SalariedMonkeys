@@ -113,6 +113,19 @@ public class SalariedMonkeys
     }
 
     /// <summary>
+    /// Returns true if salaries shouldn't be paid for this round.
+    /// </summary>
+    public bool ShouldSkipPaySalaries()
+    {
+        var isBoss = Api.IsBossEvent();
+        if (!isBoss)
+            return false;
+
+        var round = Api.GetCurrentRound();
+        return round is 40 or 60 or 80 or 100 or 120;
+    }
+
+    /// <summary>
     /// Event handler for when the user sells a tower.
     /// </summary>
     /// <param name="tower">The tower to be sold.</param>

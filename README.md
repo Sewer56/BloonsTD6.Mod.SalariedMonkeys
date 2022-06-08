@@ -74,6 +74,11 @@ Some core rules are configurable, please see `Mod Settings`.
 - ❌ Setting presets (Needs mod helper update!).  
 - ❌ Geraldo (Thinking about best course of action for it).  
 
+## Tested GameModes
+- CHIMPS (140 Rounds)  
+- Impoppable (140 Rounds)  
+- Boss Event 'Bloonarius' Elite    
+
 ## Download
 
 You can find the download for the mod in the [Releases Section on GitHub](https://github.com/Sewer56/BloonsTD6.Mod.SalariedMonkeys/releases/latest).  

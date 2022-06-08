@@ -35,7 +35,7 @@ public partial class Mod
             _isLosing = true;
         }
     }
-    
+
     // Sell towers when the round ends.
     public void OnRoundEnd_Core()
     {
@@ -47,6 +47,12 @@ public partial class Mod
     public static void AfterAddEndOfRoundCash()
     {
         Log.Debug("AfterEndOfRoundCash");
+        if (SalariedMonkeys.ShouldSkipPaySalaries())
+        {
+            Log.Debug("Skipping Salary Pay");
+            return;
+        }
+
         InGame.instance.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.PaySalaries(x));
     }
 
@@ -86,6 +92,8 @@ public partial class Mod
                 result.endRound += 40;
             else if (mod.name == ModeType.Impoppable)
                 result.endRound += 40;
+            else if (mod.name == ModeType.AlternateBloonsRounds)
+                result.endRound += 20;
         }
 
         SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings), result);

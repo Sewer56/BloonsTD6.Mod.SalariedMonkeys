@@ -1,4 +1,6 @@
-﻿namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
+﻿using Il2CppSystem.Runtime.InteropServices;
+
+namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 
 [ExcludeFromCodeCoverage] // Only way to test these is in-game.
 internal static class BloonsExtensions
@@ -25,12 +27,48 @@ internal static class BloonsExtensions
     }
 
     /// <summary>
+    /// Returns true if a boss bloon is specified to be used by the game.
+    /// </summary>
+    public static bool IsFightingBossBloon(this InGame inGame)
+    {
+        var model = inGame.GetGameModel();
+        if (model == null)
+            return false;
+
+        return !string.IsNullOrEmpty(model.bossBloonType);
+    }
+
+    /// <summary>
     /// Returns true if the player is currently at the last round.
     /// </summary>
     public static bool IsLastRound(this InGame inGame)
     {
-        var spawner = inGame.GetMap().spawner;
+        var map = inGame.GetMap();
+        if (map == null)
+            return false;
+
+        var spawner = map.spawner;
+        if (spawner == null)
+            return false;
+
         return spawner.CurrentRound == spawner.endRound;
+    }
+
+    /// <summary>
+    /// Returns the current round the player is in.
+    /// </summary>
+    /// <returns>-1 if unsuccessful, else a valid round. Rounds are 0 indexed, so round 0 corresponds to round 1 in UI.</returns>
+    public static int GetCurrentRound(this InGame inGame)
+    {
+        var map = inGame.GetMap();
+        if (map == null)
+            return -1;
+
+        var spawner = map.spawner;
+        if (spawner == null)
+            return -1;
+
+        return spawner.CurrentRound;
     }
 
     /// <summary>
