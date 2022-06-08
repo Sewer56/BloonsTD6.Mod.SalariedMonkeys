@@ -36,9 +36,11 @@ Some core rules are configurable, please see `Mod Settings`.
     - The cash penalty still counts towards XP given.  
     - Free between rounds.  
 
-- Paragons are discountable!  
-    - Allows for Elite boss events to be completable.  
-    - For the purposes of balancing, Tier 4 towers can also be discounted now.  
+- In ***Boss Events***, some extra rules apply.  
+    - Rounds 40, 60, 80, 100 and 120 are free, you don't pay salaries for them.  
+    - Paragons are discountable.  
+
+- Tier 4s are discountable!  
 
 ### Trivia
 
