@@ -13,6 +13,7 @@ $paths = @(
 	($path + '\MelonLoader\Managed\NinjaKiwi.LiNK.dll'),
     ($path + '\MelonLoader\Managed\Il2CppNewtonsoft.Json.dll'),
     ($path + '\MelonLoader\Managed\Newtonsoft.Json.dll'),
+    ($path + '\MelonLoader\Managed\UnityEngine.AnimationModule.dll'),
     ($path + '\MelonLoader\MelonLoader.dll'),
     ($path + '\MelonLoader\0Harmony.dll'),
 	($path + '\Mods\BloonsTD6 Mod Helper.dll')

@@ -55,6 +55,9 @@
     <Reference Include="Newtonsoft.Json.dll">
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\Dependencies\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
 
     <Reference Include="System.Net.Http" />
   </ItemGroup>

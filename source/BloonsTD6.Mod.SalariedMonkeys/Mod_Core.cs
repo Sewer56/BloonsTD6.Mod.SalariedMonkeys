@@ -39,7 +39,13 @@ public partial class Mod
     // Sell towers when the round ends.
     public void OnRoundEnd_Core()
     {
-        InGame.instance.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.SellTowers(x));
+        var inGame = InGame.instance;
+        inGame.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.SellTowers(x));
+        
+        if (Api.GetCurrentRound() == 100)
+            inGame.ShowRoundHint("You are entering Monkeys for Hire Freeplay Mode!\n" +
+                                 "In this mode, tower salaries are severely reduced.\n" +
+                                 "Good Luck!");
     }
 
     // We inject into the cash add function because Co-Op sends out a synchronization message

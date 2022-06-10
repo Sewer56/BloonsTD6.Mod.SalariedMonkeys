@@ -6,6 +6,16 @@ namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 internal static class BloonsExtensions
 {
     /// <summary>
+    /// Displays a custom round hint message.
+    /// </summary>
+    public static void ShowRoundHint(this InGame inGame, string text)
+    {
+        inGame.roundHintTxt.text = text;
+        inGame.roundHintTimer = inGame.roundHintAutoHideTime;
+        inGame.roundHintAnimator.SetIntegerString("AnimIndex", 1);
+    }
+
+    /// <summary>
     /// Returns a packed boolean array which denote which players are available
     /// in the current game. Entries are zero indexed.
     /// </summary>
