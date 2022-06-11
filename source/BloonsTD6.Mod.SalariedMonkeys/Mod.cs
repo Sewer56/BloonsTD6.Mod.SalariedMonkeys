@@ -1,4 +1,4 @@
-﻿[assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Salaried Monkeys", "1.0.0", "Sewer56")]
+﻿[assembly: MelonInfo(typeof(BloonsTD6.Mod.SalariedMonkeys.Mod), "Monkeys for Hire", "1.0.0", "Sewer56")]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
