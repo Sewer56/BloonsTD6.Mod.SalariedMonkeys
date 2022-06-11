@@ -54,7 +54,10 @@ internal class BloonsApi : IBloonsApi
     public bool IsRoundActive() => InGame.instance.UnityToSimulation.AreRoundsActive();
     public bool IsFreeplay() => (GetCurrentRound()) > 100;
     public bool IsBossEvent() => InGame.instance.IsFightingBossBloon();
+    public bool IsLastRound() => InGame.instance.IsLastRound();
+
     public int GetCurrentRound() => InGame.instance.GetCurrentRound() + 1;
+    public PackedBoolArray GetAvailablePlayers() => InGame.instance.GetPlayerIndices();
 
     public Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Collections.Generic.List<DiscountZone>> GetDiscountInfo(Vector3 position, int path, int tier)
     {

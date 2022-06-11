@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
+﻿using Assets.Scripts.Models.Profile;
+using Assets.Scripts.Simulation;
+using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
@@ -8,11 +10,13 @@ namespace BloonsTD6.Mod.SalariedMonkeys;
 /// </summary>
 public partial class Mod
 {
-    private void OnMatchEnd_Core() => SalariedMonkeys.DeInitialize();
+    public override void OnRestart() => SalariedMonkeys.OnGameRestart();
+
+    public void OnMatchEnd_Core() => SalariedMonkeys.DeInitialize();
 
     // Handle lose condition on round end.
     private static bool _isLosing = false;
-
+    
     public static bool BeforeRunWinAction()
     {
         if (!_isLosing)
@@ -24,14 +28,9 @@ public partial class Mod
 
     public static void BeforeRoundEnd()
     {
-        var instance = InGame.instance;
-        var totalCash = 0.0;
-        
-        InGame.instance.GetPlayerIndices().ForEachTrue(x => totalCash += Api.GetCash(x));
-        if (instance.IsLastRound() && totalCash < 0.0)
+        if (SalariedMonkeys.ShouldTriggerLoss())
         {
-            // Prevent win from triggering
-            instance.GetUnityToSimulation().Lose();
+            InGame.instance.GetUnityToSimulation().Lose();
             _isLosing = true;
         }
     }
@@ -39,13 +38,7 @@ public partial class Mod
     // Sell towers when the round ends.
     public void OnRoundEnd_Core()
     {
-        var inGame = InGame.instance;
-        inGame.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.SellTowers(x));
-        
-        if (Api.GetCurrentRound() == 100)
-            inGame.ShowRoundHint("You are entering Monkeys for Hire Freeplay Mode!\n" +
-                                 "In this mode, tower salaries are severely reduced.\n" +
-                                 "Good Luck!");
+        InGame.instance.GetPlayerIndices().ForEachTrue(x => SalariedMonkeys.SellTowers(x));
     }
 
     // We inject into the cash add function because Co-Op sends out a synchronization message
@@ -87,20 +80,19 @@ public partial class Mod
         result.RemoveTower(TowerType.BananaFarm);
     }
 
+    // Save/Load Game State
+    public static void AfterCreateMapSave(MapSaveDataModel mapData) => SalariedMonkeys.OnCreateSave(mapData);
+    public static void AfterLoadMapSave(MapSaveDataModel mapData, Simulation sim) => SalariedMonkeys.OnLoadSave(mapData, sim);
+
+    public void OnTowerDestroyed_Core(Tower tower) => SalariedMonkeys.OnTowerDestroyed(tower);
+
     // Initialize GameMode
     public static void AfterCreateModded(GameModel result, Il2CppSystem.Collections.Generic.List<ModModel> mods)
     {
         // If the gamemode is chimps, increase round count.
         // Note: GameMode variable is not yet set, so we inspect the model list for expected name.
         foreach (var mod in mods)
-        {
-            if (mod.name == ModeType.CHIMPS) 
-                result.endRound += 40;
-            else if (mod.name == ModeType.Impoppable)
-                result.endRound += 40;
-            else if (mod.name == ModeType.AlternateBloonsRounds)
-                result.endRound += 20;
-        }
+            SalariedMonkeys.GetExtraRoundCount(mod.name);
 
         SalariedMonkeys.ConstructInGame(new TowerManager(BloonsApi.Instance, _modSettings), result);
     }

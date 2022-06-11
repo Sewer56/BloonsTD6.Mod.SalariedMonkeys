@@ -1,4 +1,6 @@
-﻿using Math = System.Math;
+﻿using Assets.Scripts.Models.Profile;
+using Assets.Scripts.Simulation;
+using Math = System.Math;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
 
@@ -24,6 +26,11 @@ public class SalariedMonkeys
     /// </summary>
     public bool IsInitialized { get; private set; } = false;
 
+    /// <summary>
+    /// Tracks removed towers for this game session.
+    /// </summary>
+    public RemovedTowerTracker RemovedTowerTracker { get; private set; } = new();
+
     public ModClientSettings Settings => TowerManager.Settings;
     public IBloonsApi Api => TowerManager.BloonsApi;
 
@@ -41,8 +48,14 @@ public class SalariedMonkeys
         TowerManager  = towerManager;
         _upgradeToCost = upgradeToCost;
         _towerToCost   = towerToCost;
+        RemovedTowerTracker = new RemovedTowerTracker();
         IsInitialized = true;
     }
+
+    /// <summary>
+    /// Called when the game restarts/is reset.
+    /// </summary>
+    public void OnGameRestart() => RemovedTowerTracker = new RemovedTowerTracker();
 
     /// <summary>
     /// Marks the instance as uninitialized.
@@ -126,6 +139,24 @@ public class SalariedMonkeys
     }
 
     /// <summary>
+    /// Gets the extra amount of rounds for a given difficulty.
+    /// </summary>
+    /// <param name="difficulty">Name of the difficulty.</param>
+    public int GetExtraRoundCount(string difficulty)
+    {
+        if (difficulty == ModeType.CHIMPS)
+            return 40;
+        
+        if (difficulty == ModeType.Impoppable)
+            return 40;
+        
+        if (difficulty == ModeType.AlternateBloonsRounds)
+            return 20;
+
+        return 0;
+    }
+
+    /// <summary>
     /// Event handler for when the user sells a tower.
     /// </summary>
     /// <param name="tower">The tower to be sold.</param>
@@ -144,6 +175,35 @@ public class SalariedMonkeys
 
             Api.AddCash(-sellAmount, tower.GetOwnerZeroBased());
         }
+    }
+
+    /// <summary>
+    /// Call this when a tower gets destroyed.
+    /// </summary>
+    public void OnTowerDestroyed(Tower tower) => RemovedTowerTracker.AddTower(tower);
+
+    /// <summary>
+    /// True if a game loss should be triggered.
+    /// </summary>
+    public bool ShouldTriggerLoss()
+    {
+        var totalCash = 0.0;
+        Api.GetAvailablePlayers().ForEachTrue(x => totalCash += Api.GetCash(x));
+        return (Api.IsLastRound() && totalCash < 0.0);
+    }
+
+    /// <summary>
+    /// Call this when a save file is created.
+    /// </summary>
+    public void OnCreateSave(MapSaveDataModel mapData) => mapData.metaData[RemovedTowerTracker.MetadataEntryName] = RemovedTowerTracker.Serialize();
+
+    /// <summary>
+    /// Call this when a save file is loaded.
+    /// </summary>
+    public void OnLoadSave(MapSaveDataModel mapData, Simulation sim)
+    {
+        if (Il2CppDictionaryExtensions.TryGetValue(mapData.metaData, RemovedTowerTracker.MetadataEntryName, out var value))
+            RemovedTowerTracker = RemovedTowerTracker.Deserialize(value);
     }
 }
 

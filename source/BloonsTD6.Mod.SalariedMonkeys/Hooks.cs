@@ -1,9 +1,17 @@
 ﻿// ReSharper disable InconsistentNaming
 
+using System.Runtime.InteropServices;
+using Assets.Scripts.Models.Profile;
+using Assets.Scripts.Simulation;
 using Assets.Scripts.Simulation.Action;
 using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
+using Assets.Scripts.Simulation.Utils;
 using Assets.Scripts.Unity.Bridge;
+using Assets.Scripts.Utils;
 using BloonsTD6.Mod.SalariedMonkeys.Utilities;
+using BloonsTD6.Mod.SalariedMonkeys.Utilities.Hooks;
+using NinjaKiwi.Players;
+using NinjaKiwi.Players.Files;
 using TowerManager = Assets.Scripts.Simulation.Towers.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
@@ -93,4 +101,40 @@ public class BloodSacrifice_Activate
 {
     [HarmonyPrefix]
     public static void Prefix(BloodSacrifice __instance) => Mod.BeforeActivateBloodSacrifice(__instance);
+}
+
+[HarmonyPatch(typeof(MapSaveLoader), nameof(MapSaveLoader.LoadMapSaveData))]
+public class MapSaveLoader_LoadMapSaveData
+{
+    [HarmonyPostfix]
+    public static void PostFix(ref MapSaveDataModel mapData, ref Simulation sim) => Mod.AfterLoadMapSave(mapData, sim);
+}
+
+public class NativeHooks
+{
+    /// <summary>
+    /// Uses IntPtr to ignore the generic type! Beware!!
+    /// </summary>
+    public static NativeHook<CreateMapSaveData_Fn> LoadFromFileStorageHook = new Il2CppNativeHookable<CreateMapSaveData_Fn>(AccessTools.Method(typeof(MapSaveLoader), nameof(MapSaveLoader.CreateMapSaveData))).Hook(LoadFromFileStorageImpl).Activate();
+
+    private static IntPtr LoadFromFileStorageImpl(IntPtr mapsavedataid, int gameid, IntPtr simulation, IntPtr gamesettings, IntPtr heroes, int round, IntPtr dailychallengeeventid)
+    {
+        var result = LoadFromFileStorageHook.OriginalFunction(mapsavedataid, gameid, simulation, gamesettings, heroes, round, dailychallengeeventid);
+        Mod.AfterCreateMapSave(new MapSaveDataModel(result));
+        return result;
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate IntPtr CreateMapSaveData_Fn
+    (
+        IntPtr mapSaveDataID,
+        int gameId,
+        IntPtr simulation,
+        IntPtr gameSettings,
+        IntPtr heroes,
+        int round,
+        IntPtr dailyChallengeEventId
+    );
+
+    public static void Init() { /* Dummy for static initialisation */ }
 }

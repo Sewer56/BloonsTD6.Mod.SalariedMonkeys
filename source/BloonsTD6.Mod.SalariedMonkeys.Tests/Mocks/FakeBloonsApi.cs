@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Simulation.Towers.Behaviors;
 using BloonsTD6.Mod.SalariedMonkeys.Interfaces;
+using BloonsTD6.Mod.SalariedMonkeys.Structures;
 using Vector3 = Assets.Scripts.Simulation.SMath.Vector3;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Tests.Mocks;
@@ -36,7 +37,10 @@ internal class FakeBloonsApi : IBloonsApi
     public bool IsRoundActive() => IsRoundActiveValue;
     public bool IsFreeplay() => false;
     public bool IsBossEvent() => false;
+    public bool IsLastRound() => false;
+
     public int GetCurrentRound() => 0;
+    public PackedBoolArray GetAvailablePlayers() => new(1);
 
     public Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Collections.Generic.List<DiscountZone>> GetDiscountInfo(Vector3 position, int path, int tier)
     {

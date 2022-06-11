@@ -61,8 +61,11 @@ public partial class Mod : BloonsTD6Mod
     {
         Log.Debug($"TowerDestroyed, Worth {tower.worth}");
         OnTowerDestroyed_UI(tower);
+        OnTowerDestroyed_Core(tower);
     }
 
     // Executed every frame.
+    public override void OnApplicationStart() => NativeHooks.Init();
+
     public override void OnUpdate() => OnUpdate_UI();
 }

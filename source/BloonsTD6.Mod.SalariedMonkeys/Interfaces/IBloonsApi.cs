@@ -52,10 +52,21 @@ public interface IBloonsApi
     bool IsBossEvent();
 
     /// <summary>
+    /// True if the player is currently on the last round of the game.
+    /// </summary>
+    bool IsLastRound();
+
+    /// <summary>
     /// Returns the current round counter.
     /// Round is returned indexed 1, equal to game's UI.
     /// </summary>
     int GetCurrentRound();
+
+    /// <summary>
+    /// Returns a packed boolean array which denote which players are available
+    /// in the current game. Entries are zero indexed.
+    /// </summary>
+    PackedBoolArray GetAvailablePlayers();
 
     /// <summary>
     /// Retrieves the info of all the discounts applicable to a given position on the map.
