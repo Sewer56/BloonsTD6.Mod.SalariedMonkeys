@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Models.Profile;
 using Assets.Scripts.Simulation;
 using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
-using Math = Assets.Scripts.Simulation.SMath.Math;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;

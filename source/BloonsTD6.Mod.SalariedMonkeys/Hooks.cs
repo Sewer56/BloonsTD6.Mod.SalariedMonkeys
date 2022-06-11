@@ -3,15 +3,10 @@
 using System.Runtime.InteropServices;
 using Assets.Scripts.Models.Profile;
 using Assets.Scripts.Simulation;
-using Assets.Scripts.Simulation.Action;
 using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
 using Assets.Scripts.Simulation.Utils;
 using Assets.Scripts.Unity.Bridge;
-using Assets.Scripts.Utils;
-using BloonsTD6.Mod.SalariedMonkeys.Utilities;
 using BloonsTD6.Mod.SalariedMonkeys.Utilities.Hooks;
-using NinjaKiwi.Players;
-using NinjaKiwi.Players.Files;
 using TowerManager = Assets.Scripts.Simulation.Towers.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
