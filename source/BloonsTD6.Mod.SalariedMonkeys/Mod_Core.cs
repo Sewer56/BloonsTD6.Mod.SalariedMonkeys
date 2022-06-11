@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Models.Profile;
 using Assets.Scripts.Simulation;
 using Assets.Scripts.Simulation.Towers.Behaviors.Abilities.Behaviors;
+using Math = Assets.Scripts.Simulation.SMath.Math;
 using TowerManager = BloonsTD6.Mod.SalariedMonkeys.Implementation.TowerManager;
 
 namespace BloonsTD6.Mod.SalariedMonkeys;
@@ -78,6 +79,32 @@ public partial class Mod
 
         result.DisableIncome();
         result.RemoveTower(TowerType.BananaFarm);
+    }
+
+    // Paragon Degree Implementation
+    
+    // Backup of deleted towers before sacrifice so some towers don't get counted twice.
+    private static List<RemovedTowerInfo> _deletedTowers = new();
+
+    public static void BeforeParagonSacrifice(ParagonTower paragonTower)
+    {
+        _deletedTowers = SalariedMonkeys.RemovedTowerTracker.GetFromBaseId(paragonTower.tower.towerModel.baseId);
+    }
+
+    public static void AfterParagonSacrifice(ParagonTower paragonTower)
+    {
+        var totalPops = 0L;
+        foreach (var tower in _deletedTowers)
+            totalPops += tower.Pops;
+        
+        // Add power from pops.
+        var investmentInfo = paragonTower.investmentInfo;
+        var addedPower = investmentInfo.AddPowerFromPops(totalPops);
+        paragonTower.investmentInfo = investmentInfo;
+        Log.Debug($"[Paragon Sacrifice] Total Pops: {totalPops}, Added Power: {addedPower}");
+
+        // Update current degree.
+        paragonTower.UpdateDegree();
     }
 
     // Save/Load Game State

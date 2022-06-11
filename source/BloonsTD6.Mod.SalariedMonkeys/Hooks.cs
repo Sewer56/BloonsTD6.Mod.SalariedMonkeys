@@ -103,6 +103,16 @@ public class BloodSacrifice_Activate
     public static void Prefix(BloodSacrifice __instance) => Mod.BeforeActivateBloodSacrifice(__instance);
 }
 
+[HarmonyPatch(typeof(ParagonTower), nameof(ParagonTower.StartSacrifice))]
+public class ParagonTower_StartSacrifice
+{
+    [HarmonyPrefix]
+    public static void Prefix(ParagonTower __instance) => Mod.BeforeParagonSacrifice(__instance);
+
+    [HarmonyPostfix]
+    public static void PostFix(ParagonTower __instance) => Mod.AfterParagonSacrifice(__instance);
+}
+
 [HarmonyPatch(typeof(MapSaveLoader), nameof(MapSaveLoader.LoadMapSaveData))]
 public class MapSaveLoader_LoadMapSaveData
 {

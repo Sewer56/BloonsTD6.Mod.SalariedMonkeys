@@ -1,4 +1,6 @@
-﻿using Il2CppSystem.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using Il2CppSystem.Runtime.InteropServices;
+using Math = System.Math;
 
 namespace BloonsTD6.Mod.SalariedMonkeys.Utilities;
 
@@ -175,5 +177,25 @@ internal static class BloonsExtensions
             totalDiscount -= value.discountZoneModel.discountMultiplier;
 
         return totalDiscount;
+    }
+
+    /// <summary>
+    /// Adds a given amount of power from pops to the paragon investment info.
+    /// </summary>
+    /// <param name="info">The investment info.</param>
+    /// <param name="numberOfPops">Number of pops to add.</param>
+    /// <param name="degreeModel">Dictates how paragon degrees are handled.</param>
+    /// <returns>Amount of added power.</returns>
+    public static float AddPowerFromPops(this ref ParagonTower.InvestmentInfo info, long numberOfPops, ParagonDegreeDataModel? degreeModel = null)
+    {
+        degreeModel ??= InGame.instance.GetGameModel().paragonDegreeDataModel;
+        var extraPower = numberOfPops / degreeModel.popsOverX;
+
+        var originalPowerFromPops = info.powerFromPops;
+        info.powerFromPops = Math.Min(degreeModel.maxPowerFromPops, info.powerFromPops + extraPower); // Cap extra power if needed.
+        var addedPower = info.powerFromPops - originalPowerFromPops;
+        info.totalInvestment += addedPower;
+
+        return addedPower;
     }
 }
