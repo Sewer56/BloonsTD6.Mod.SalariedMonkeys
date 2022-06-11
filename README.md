@@ -55,6 +55,7 @@ Some core rules are configurable, please see `Mod Settings`.
 
 ### Strategy Hints (Spoiler!)
 <details>
+    
 - By default, the cost of a tower is paid over the course of 20 rounds.  
     - Anything bought more than 20 rounds before last round is more expensive.  
     - Anything bought in the last 20 rounds can be considerably cheaper.  
