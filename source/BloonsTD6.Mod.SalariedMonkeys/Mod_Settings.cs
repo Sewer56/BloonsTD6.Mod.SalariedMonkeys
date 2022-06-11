@@ -29,6 +29,16 @@ public partial class Mod
         displayName = "Disable Income",
     };
 
+    private static readonly ModSettingBool ParagonDegreeSoldTowers = new ModSettingBool(true)
+    {
+        displayName = "Include Sold Towers' Pop Count in Degrees"
+    };
+
+    private static readonly ModSettingBool ParagonDegreeSoldTowersParagons = new ModSettingBool(true)
+    {
+        displayName = "Include Paragons in Sold Towers' Pop Count"
+    };
+
     private static readonly ModSettingBool ShowSalaryUi = new ModSettingBool(true)
     {
         displayName = "Show Salary (Beside Cash)",
@@ -61,6 +71,8 @@ public partial class Mod
         ShowSalaryUi.OnValueChanged.Add(SetShowSalaryUI);
         SellPriceDisplay.OnValueChanged.Add(SetSellPriceDisplayMode);
         FreeplaySalaryMultiplier.OnValueChanged.Add(SetFreeplaySalaryMultiplier);
+        ParagonDegreeSoldTowers.OnValueChanged.Add(SetParagonDegreeSoldTowers);
+        ParagonDegreeSoldTowersParagons.OnValueChanged.Add(SetParagonDegreeSoldTowersParagons);
 
         SellPenalty.OnInitialized.Add(PrintSellPenaltyModes);
         ApplySettings();
@@ -77,6 +89,8 @@ public partial class Mod
         SetShowSalaryUI(ShowSalaryUi);
         SetSellPriceDisplayMode(SellPriceDisplay);
         SetFreeplaySalaryMultiplier(FreeplaySalaryMultiplier);
+        SetParagonDegreeSoldTowers(ParagonDegreeSoldTowers);
+        SetParagonDegreeSoldTowersParagons(ParagonDegreeSoldTowersParagons);
     }
 
     // Event Handlers //
@@ -86,6 +100,8 @@ public partial class Mod
     private void SetCostPerRoundFromSlider(double d) => _modSettings.CostPercentPerRound = (float)(d / 100.0);
     private void SetFreeplaySalaryMultiplier(double d) => _modSettings.FreeplaySalaryMultiplier = (float)(d / 100.0);
     private void SetShowSalaryUI(bool value) => _modSettings.ShowSalaryInUI = value;
+    private void SetParagonDegreeSoldTowers(bool value) => _modSettings.IncludeDestroyedTowersInParagonDegree = value;
+    private void SetParagonDegreeSoldTowersParagons(bool value) => _modSettings.IncludeParagonsInDestroyedTowersParagonDegree = value;
 
     // Temporary Stuff //
     private void PrintSellPenaltyModes(SharedOption option)

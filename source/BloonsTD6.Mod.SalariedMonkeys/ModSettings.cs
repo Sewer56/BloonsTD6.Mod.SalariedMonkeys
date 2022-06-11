@@ -61,6 +61,16 @@ public class ModServerSettings : IMappable<ModServerSettings>
     public bool DisableIncome { get; set; } = true;
 
     /// <summary>
+    /// Includes destroyed towers in paragon sacrifice calculation.
+    /// </summary>
+    public bool IncludeDestroyedTowersInParagonDegree { get; set; } = true;
+
+    /// <summary>
+    /// Includes paragons when adding paragon degrees for destroyed towers.
+    /// </summary>
+    public bool IncludeParagonsInDestroyedTowersParagonDegree { get; set; } = true;
+
+    /// <summary>
     /// Determines how selling is penalised in game.
     /// </summary>
     public SellPenaltyKind SellPenalty { get; set; } = SellPenaltyKind.FreeBetweenRounds;
@@ -87,8 +97,11 @@ public class ModServerSettings : IMappable<ModServerSettings>
     public void Map(in ModServerSettings other)
     {
         CostPercentPerRound = other.CostPercentPerRound;
+        FreeplaySalaryMultiplier = other.FreeplaySalaryMultiplier;
         DisableIncome = other.DisableIncome;
         SellPenalty = other.SellPenalty;
+        IncludeDestroyedTowersInParagonDegree = other.IncludeDestroyedTowersInParagonDegree;
+        IncludeParagonsInDestroyedTowersParagonDegree = other.IncludeParagonsInDestroyedTowersParagonDegree;
     }
 }
 

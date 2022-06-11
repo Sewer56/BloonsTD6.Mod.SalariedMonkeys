@@ -92,10 +92,13 @@ public partial class Mod
 
     public static void AfterParagonSacrifice(ParagonTower paragonTower)
     {
+        if (!_modSettings.IncludeDestroyedTowersInParagonDegree)
+            return;
+
         var totalPops = 0L;
         foreach (var tower in _deletedTowers)
         {
-            if (!tower.IsParagon)
+            if (_modSettings.IncludeParagonsInDestroyedTowersParagonDegree || !tower.IsParagon)
                 totalPops += tower.Pops;
         }
         
