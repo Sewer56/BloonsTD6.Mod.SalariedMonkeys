@@ -13,12 +13,19 @@ public class RemovedTowerInfo
     /// </summary>
     public long Pops { get; set; }
 
+    /// <summary>
+    /// True if the tower is a paragon, else false.
+    /// </summary>
+    public bool IsParagon { get; set; }
+
     // For serializers
     public RemovedTowerInfo() { }
 
     public RemovedTowerInfo(Tower tower)
     {
         Pops = tower.damageDealt;
-        BaseTowerId = tower.towerModel.baseId;
+        var model = tower.towerModel;
+        BaseTowerId = model.baseId;
+        IsParagon = model.isParagon;
     }
 }

@@ -95,7 +95,10 @@ public partial class Mod
     {
         var totalPops = 0L;
         foreach (var tower in _deletedTowers)
-            totalPops += tower.Pops;
+        {
+            if (!tower.IsParagon)
+                totalPops += tower.Pops;
+        }
         
         // Add power from pops.
         var investmentInfo = paragonTower.investmentInfo;

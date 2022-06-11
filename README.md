@@ -38,7 +38,10 @@ Some core rules are configurable, please see `Mod Settings`.
 
 - In ***Boss Events***, some extra rules apply.  
     - Rounds 40, 60, 80, 100 and 120 are free, you don't pay salaries for them.  
-    - Paragons are discountable.  
+
+- Paragons have been slightly altered:  
+    - Paragons are discountable [to balance boss events].  
+    - Pops from sold (and previously sacrificed) non-paragon towers are included when calculating paragon degree.  
 
 - Tier 4s are discountable!  
 
